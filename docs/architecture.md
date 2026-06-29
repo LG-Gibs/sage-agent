@@ -232,7 +232,8 @@ flowchart LR
 | SSE contract (parser + serializer) | `packages/sse-contract` | 0–1 ✅ |
 | Two-domain registry | `packages/tool-registry` | 0–1 ✅ (dispatcher: P3) |
 | Signal readers + Capability Manifest | `packages/arbiter-core` | 0 ✅ |
-| ArbiterRouter / ReActLoop / ToolDomainRouter | `packages/arbiter-core` | interface only (P3) |
+| ArbiterRouter / ReActLoop / ToolDomainRouter | `packages/arbiter-core` (`router.ts`, `agent/*`) | 3 ✅ |
+| Cloud/local inference targets + 50-case routing benchmark | `packages/arbiter-core/src/agent`, `src/benchmark` | 3 ✅ |
 | SAGE Backend v3 proxy | `apps/backend` | 0–1 ✅ |
 | Native capability + thermal probe | `apps/mobile/modules/sage-capability` | 0 ✅ |
 | Native signal providers + boot screen | `apps/mobile/src`, `App.tsx` | 0 ✅ |

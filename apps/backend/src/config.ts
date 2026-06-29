@@ -19,7 +19,8 @@ export interface BackendConfig {
 
 const DEFAULT_ALLOWED = [
   'mock-cloud',
-  'anthropic/claude-sonnet-4',
+  'google/gemini-2.5-flash', // ArbiterRouter cloud-efficient tier
+  'anthropic/claude-sonnet-4', // ArbiterRouter cloud-capable tier
   'google/gemini-2.5-pro',
   'openai/o3',
   'perplexity/sonar',

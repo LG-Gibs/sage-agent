@@ -7,7 +7,7 @@ import { VoicePipeline, type VoicePipelineHooks } from '@sage/voice-core';
 import { createWakeWordEngine } from './wakeWord';
 import { createWhisperStt } from './stt';
 import { createPiperTts } from './tts';
-import { createLocalResponder } from '../responder/localResponder';
+import { createReActResponder } from '../agent/reactResponder';
 import { PIPER_VOICE_ID } from './voiceConfig';
 
 function pickModel(manifest: CapabilityManifest): InstalledModel | null {
@@ -21,9 +21,11 @@ function pickModel(manifest: CapabilityManifest): InstalledModel | null {
 }
 
 /**
- * Compose the native voice engines + the offline local responder into a
- * VoicePipeline. Returns null when no verified model is present (the UI then
- * shows a "voice unavailable" reason from the feature flags).
+ * Compose the native voice engines + the Phase 3 ReActLoop responder into a
+ * VoicePipeline. The responder now routes each turn via the ArbiterRouter
+ * (local llama.cpp vs cloud) and runs tools through the ToolDomainRouter.
+ * Returns null when no verified model is present (the UI then shows a
+ * "voice unavailable" reason from the feature flags).
  */
 export function createVoicePipeline(
   manifest: CapabilityManifest,
@@ -36,7 +38,7 @@ export function createVoicePipeline(
     wake: createWakeWordEngine(),
     stt: createWhisperStt(model),
     tts: createPiperTts(PIPER_VOICE_ID),
-    responder: createLocalResponder(model),
+    responder: createReActResponder(manifest, model),
     hooks,
   });
 }

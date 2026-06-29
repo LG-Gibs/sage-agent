@@ -78,8 +78,8 @@ WatermelonDB + sqlite-vec + MMKV + SQLCipher · QuickJS + E2B Firecracker · Exp
 | 0 | Environment & capability detection | ✅ delivered |
 | 1 | Architecture & compliance | ✅ delivered |
 | 2 | Native shell & voice loop | ✅ delivered |
-| 3 | Arbiter Core (router, ReActLoop, dispatch) | ⏳ next (interfaces stubbed) |
-| 4 | Code sandbox (QuickJS / E2B) | planned |
+| 3 | Arbiter Core (router, ReActLoop, dispatch) | ✅ delivered |
+| 4 | Code sandbox (QuickJS / E2B) | ⏳ next |
 | 5 | Search & memory (sqlite-vec / Tavily) | planned |
 | 6 | Deep OS integrations | planned |
 

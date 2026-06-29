@@ -15,3 +15,11 @@ export * from './capability/manifest';
 export * from './capability/mockProbe';
 export * from './capability/gating';
 export * from './router';
+// Phase 3 — Arbiter Core orchestration
+export * from './agent/events';
+export * from './agent/toolDomainRouter';
+export * from './agent/cloudTarget';
+export * from './agent/localTarget';
+export * from './agent/reactLoop';
+export * from './agent/mocks';
+export * from './benchmark/routingCases';

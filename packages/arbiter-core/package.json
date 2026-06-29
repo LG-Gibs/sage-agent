@@ -12,6 +12,8 @@
     "build": "tsc -b"
   },
   "dependencies": {
-    "@sage/shared-types": "*"
+    "@sage/shared-types": "*",
+    "@sage/sse-contract": "*",
+    "@sage/tool-registry": "*"
   }
 }
