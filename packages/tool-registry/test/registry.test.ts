@@ -11,7 +11,10 @@ const EXPECTED_MOBILE: ToolName[] = [
   'render_prototype',
   'read_native_contacts',
   'create_calendar_event',
+  'query_calendar',
   'set_reminder',
+  'list_reminders',
+  'file_system',
   'search_local_memory',
 ];
 
@@ -23,9 +26,9 @@ const EXPECTED_CLOUD: ToolName[] = [
 ];
 
 describe('ToolRegistry — two-domain integrity (Constitutional Constraint 4)', () => {
-  it('registers exactly 10 tools (6 mobile, 4 cloud)', () => {
-    expect(defaultToolRegistry.names()).toHaveLength(10);
-    expect(defaultToolRegistry.byDomain('mobile')).toHaveLength(6);
+  it('registers 9 mobile + 4 cloud tools (13 total after Phase 6)', () => {
+    expect(defaultToolRegistry.names()).toHaveLength(13);
+    expect(defaultToolRegistry.byDomain('mobile')).toHaveLength(9);
     expect(defaultToolRegistry.byDomain('cloud')).toHaveLength(4);
   });
 
@@ -57,11 +60,9 @@ describe('ToolRegistry — two-domain integrity (Constitutional Constraint 4)', 
     );
   });
 
-  it('detects a corrupted registry (wrong split)', () => {
-    const broken = new ToolRegistry(
-      TOOL_DEFINITIONS.filter((d) => d.name !== 'deep_research'),
-    );
-    expect(() => broken.assertIntegrity()).toThrow(/Expected 10/);
+  it('detects a corrupted registry (a domain emptied of tools)', () => {
+    const broken = new ToolRegistry(TOOL_DEFINITIONS.filter((d) => d.domain !== 'cloud'));
+    expect(() => broken.assertIntegrity()).toThrow(/both domains/);
   });
 
   it('rejects a mobile tool mislabeled with a cloud offline path', () => {
@@ -72,9 +73,9 @@ describe('ToolRegistry — two-domain integrity (Constitutional Constraint 4)', 
     expect(() => reg.assertIntegrity()).toThrow(/must declare offline:'native'/);
   });
 
-  it('exposes LLM-formatted tool schemas for all 10 tools', () => {
+  it('exposes LLM-formatted tool schemas for every registered tool', () => {
     const tools = defaultToolRegistry.toLLMTools();
-    expect(tools).toHaveLength(10);
+    expect(tools).toHaveLength(13);
     expect(tools[0]).toHaveProperty('function.parameters');
   });
 });

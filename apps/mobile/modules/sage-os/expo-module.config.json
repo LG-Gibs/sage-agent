@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["SageOsModule"]
+  },
+  "android": {
+    "modules": ["com.iterativ.sage.os.SageOsModule"]
+  }
+}

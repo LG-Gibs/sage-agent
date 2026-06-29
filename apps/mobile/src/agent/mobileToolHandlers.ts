@@ -4,23 +4,16 @@ import { SandboxManager } from '@sage/sandbox-core/manager';
 import { toMemoryFragments } from '@sage/memory-core';
 import { createReactNativeQuickJsSandbox } from '../sandbox/reactNativeQuickJs';
 import { deviceMemory } from '../memory/deviceMemory';
+import { osToolHandlers } from '../os/osTools';
 
 /**
- * Mobile-domain tool handlers for the ToolDomainRouter.
- *
- * Phase 4 wires execute_js + render_prototype to the real SandboxManager
- * (QuickJS isolated context / sandboxed WebView packaging). The remaining
- * native tools land in their phases and return a clean UNSUPPORTED ToolResult
- * the model can adapt to until then — never a crash.
+ * Mobile-domain tool handlers for the ToolDomainRouter. Every registered mobile
+ * tool now has a real on-device handler:
+ *  - Phase 4: execute_js + render_prototype via the SandboxManager (QuickJS).
+ *  - Phase 5: search_local_memory via the sqlite-vec store.
+ *  - Phase 6: contacts/calendar/reminders/file_system via the native SageOs
+ *    bridge (osToolHandlers), with clean PERMISSION_DENIED handling.
  */
-function pending(phase: string): MobileToolHandler {
-  return async (call: ToolCall) => ({
-    tool_call_id: call.id,
-    name: call.name,
-    content: JSON.stringify({ error: `${call.name} arrives in ${phase}`, code: 'UNSUPPORTED' }),
-    error: { code: 'UNSUPPORTED', message: `${call.name} not yet implemented (${phase})` },
-  });
-}
 
 // One SandboxManager (warm QuickJS) shared across tool calls.
 const sandbox = new SandboxManager({
@@ -46,7 +39,5 @@ export const mobileToolHandlers: Partial<Record<MobileToolName, MobileToolHandle
   execute_js: sandboxHandlers.execute_js, // Phase 4 — QuickJS isolated context
   render_prototype: sandboxHandlers.render_prototype, // Phase 4 — sandboxed WebView
   search_local_memory: searchLocalMemory, // Phase 5 — sqlite-vec RAG
-  read_native_contacts: pending('Phase 6 (Deep OS Integrations)'),
-  create_calendar_event: pending('Phase 6 (Deep OS Integrations)'),
-  set_reminder: pending('Phase 6 (Deep OS Integrations)'),
+  ...osToolHandlers, // Phase 6 — native Contacts / Calendar / Reminders / Files
 };

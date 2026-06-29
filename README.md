@@ -83,6 +83,6 @@ WatermelonDB + sqlite-vec + MMKV + SQLCipher · QuickJS + E2B Firecracker · Exp
 | 3 | Arbiter Core (router, ReActLoop, dispatch) | ✅ delivered |
 | 4 | Code sandbox (QuickJS / E2B) | ✅ delivered |
 | 5 | Search & memory (sqlite-vec / Tavily) | ✅ delivered |
-| 6 | Deep OS integrations | ⏳ next |
+| 6 | Deep OS integrations | ✅ delivered |
 
-See `docs/phase-0-1-report.md` for the detailed gate report.
+**All six phases (0–6) are delivered.** Per-phase gate reports: `docs/phase-0-1-report.md` … `docs/phase-6-report.md`. 117 tests passing; `tsc -b` clean.

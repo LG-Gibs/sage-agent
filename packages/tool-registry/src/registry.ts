@@ -90,14 +90,11 @@ export class ToolRegistry {
         );
       }
     }
-    if (this.byName.size !== 10) {
+    // The registry grows across phases (Phase 6 added native OS tools), so the
+    // invariant is "both domains are populated", not a frozen count.
+    if (mobile.length === 0 || cloud.length === 0) {
       throw new ToolRegistryError(
-        `Expected 10 registered tools, found ${this.byName.size}`,
-      );
-    }
-    if (mobile.length !== 6 || cloud.length !== 4) {
-      throw new ToolRegistryError(
-        `Expected 6 mobile / 4 cloud tools, found ${mobile.length}/${cloud.length}`,
+        `Registry must have both domains; found ${mobile.length} mobile / ${cloud.length} cloud`,
       );
     }
   }

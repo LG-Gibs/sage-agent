@@ -124,6 +124,49 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
       required: ['query'],
     },
   },
+  {
+    name: 'query_calendar',
+    domain: 'mobile',
+    offline: 'native',
+    description: 'Query calendar events in a date range (EventKit / CalendarContract).',
+    parameters: {
+      type: 'object',
+      properties: {
+        startISO: { type: 'string', description: 'ISO-8601 range start.' },
+        endISO: { type: 'string', description: 'ISO-8601 range end.' },
+      },
+      required: ['startISO', 'endISO'],
+    },
+  },
+  {
+    name: 'list_reminders',
+    domain: 'mobile',
+    offline: 'native',
+    description: 'List reminders, optionally only incomplete ones (EventKit / provider).',
+    parameters: {
+      type: 'object',
+      properties: {
+        includeCompleted: { type: 'boolean', description: 'Default false.' },
+        limit: { type: 'number', description: 'Max results (default 50).' },
+      },
+    },
+  },
+  {
+    name: 'file_system',
+    domain: 'mobile',
+    offline: 'native',
+    description:
+      'Sandboxed file access (Files.app / SAF): read, write, or list within the app document scope.',
+    parameters: {
+      type: 'object',
+      properties: {
+        op: { type: 'string', enum: ['read', 'write', 'list'] },
+        path: { type: 'string', description: 'Relative path within the sandbox.' },
+        content: { type: 'string', description: 'Content to write (op=write).' },
+      },
+      required: ['op', 'path'],
+    },
+  },
 
   // ── Cloud domain (routed to POST /api/sage/tools/*; requires connectivity) ──
   {

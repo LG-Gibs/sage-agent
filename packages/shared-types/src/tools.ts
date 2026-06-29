@@ -10,9 +10,12 @@ export type ToolDomain = 'mobile' | 'cloud';
 export type MobileToolName =
   | 'execute_js' // QuickJS, isolated context
   | 'render_prototype' // sandboxed WebView HTML/JS/CSS
-  | 'read_native_contacts' // Contacts (EventKit-adjacent / ContactsContract)
+  | 'read_native_contacts' // Contacts read/search (Contacts / ContactsContract)
   | 'create_calendar_event' // EventKit / CalendarContract
+  | 'query_calendar' // Calendar query (EventKit / CalendarContract) — Phase 6
   | 'set_reminder' // EventKit / AlarmManager
+  | 'list_reminders' // Reminders list (EventKit / provider) — Phase 6
+  | 'file_system' // sandboxed read/write/list (Files.app / SAF) — Phase 6
   | 'search_local_memory'; // sqlite-vec top-k retrieval
 
 /** Cloud-domain tools: routed to POST /api/sage/tools/*. Require connectivity. */
@@ -54,5 +57,16 @@ export function offlineResult(call: ToolCall): ToolResult {
       code: 'OFFLINE',
     }),
     error: { code: 'OFFLINE', message: 'Device is offline; cloud tool unavailable' },
+  };
+}
+
+/** Canonical PERMISSION_DENIED envelope a native tool returns when the OS denies access. */
+export function permissionDeniedResult(call: ToolCall, detail?: string): ToolResult {
+  const message = detail ?? `Permission denied for ${call.name}`;
+  return {
+    tool_call_id: call.id,
+    name: call.name,
+    content: JSON.stringify({ error: 'permission_denied', code: 'PERMISSION_DENIED' }),
+    error: { code: 'PERMISSION_DENIED', message },
   };
 }

@@ -218,11 +218,17 @@ flowchart LR
 | `read_native_contacts` | mobile | native | Contacts (EventKit / ContactsContract) |
 | `create_calendar_event` | mobile | native | EventKit / CalendarContract |
 | `set_reminder` | mobile | native | EventKit / AlarmManager |
+| `query_calendar` | mobile | native | EventKit / CalendarContract (P6) |
+| `list_reminders` | mobile | native | EventKit / local store (P6) |
+| `file_system` | mobile | native | Files.app / SAF, sandboxed (P6) |
 | `search_local_memory` | mobile | native | sqlite-vec top-k |
 | `web_search` | cloud | OFFLINE error | Tavily |
 | `fetch_webpage` | cloud | OFFLINE error | Jina Reader |
 | `execute_python` | cloud | OFFLINE error | E2B Firecracker |
 | `deep_research` | cloud | OFFLINE error | Tavily + Jina (server-orchestrated) |
+
+13 tools after Phase 6 (9 mobile / 4 cloud); integrity enforces domain + offline
+consistency, not a frozen count.
 
 ## 8. Repository ↔ architecture map
 
@@ -241,4 +247,4 @@ flowchart LR
 | QuickJS / E2B sandbox | `packages/sandbox-core`, `apps/mobile`, `apps/backend` | 4 ✅ |
 | sqlite-vec RAG + memory lifecycle + injection | `packages/memory-core`, `apps/mobile/src/memory` | 5 ✅ |
 | Online research (Tavily + Jina synthesis) | `apps/backend/src/research.ts` | 5 ✅ |
-| Deep OS integrations | `apps/mobile` | P6 |
+| Deep OS integrations (Contacts/Calendar/Reminders/Files) | `apps/mobile/modules/sage-os`, `apps/mobile/src/os` | 6 ✅ |

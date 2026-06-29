@@ -8,7 +8,10 @@ const MOBILE: MobileToolName[] = [
   'render_prototype',
   'read_native_contacts',
   'create_calendar_event',
+  'query_calendar',
   'set_reminder',
+  'list_reminders',
+  'file_system',
   'search_local_memory',
 ];
 
