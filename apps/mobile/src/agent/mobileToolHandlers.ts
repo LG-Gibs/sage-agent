@@ -1,7 +1,9 @@
 import type { MobileToolHandler } from '@sage/arbiter-core';
 import type { MobileToolName, ToolCall } from '@sage/shared-types';
 import { SandboxManager } from '@sage/sandbox-core/manager';
+import { toMemoryFragments } from '@sage/memory-core';
 import { createReactNativeQuickJsSandbox } from '../sandbox/reactNativeQuickJs';
+import { deviceMemory } from '../memory/deviceMemory';
 
 /**
  * Mobile-domain tool handlers for the ToolDomainRouter.
@@ -27,10 +29,23 @@ const sandbox = new SandboxManager({
 });
 const sandboxHandlers = sandbox.mobileHandlers();
 
+// Phase 5 — sqlite-vec RAG retrieval, on-device.
+const searchLocalMemory: MobileToolHandler = async (call: ToolCall) => {
+  const args = call.arguments as Record<string, unknown>;
+  const query = typeof args.query === 'string' ? args.query : '';
+  const topK = typeof args.topK === 'number' ? args.topK : 5;
+  const hits = await deviceMemory().recall(query, topK);
+  return {
+    tool_call_id: call.id,
+    name: call.name,
+    content: JSON.stringify({ memories: toMemoryFragments(hits) }),
+  };
+};
+
 export const mobileToolHandlers: Partial<Record<MobileToolName, MobileToolHandler>> = {
   execute_js: sandboxHandlers.execute_js, // Phase 4 — QuickJS isolated context
   render_prototype: sandboxHandlers.render_prototype, // Phase 4 — sandboxed WebView
-  search_local_memory: pending('Phase 5 (Search & Memory)'),
+  search_local_memory: searchLocalMemory, // Phase 5 — sqlite-vec RAG
   read_native_contacts: pending('Phase 6 (Deep OS Integrations)'),
   create_calendar_event: pending('Phase 6 (Deep OS Integrations)'),
   set_reminder: pending('Phase 6 (Deep OS Integrations)'),

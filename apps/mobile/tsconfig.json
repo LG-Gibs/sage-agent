@@ -9,7 +9,8 @@
       "@sage/tool-registry": ["../../packages/tool-registry/src/index.ts"],
       "@sage/sse-contract": ["../../packages/sse-contract/src/index.ts"],
       "@sage/voice-core": ["../../packages/voice-core/src/index.ts"],
-      "@sage/sandbox-core/manager": ["../../packages/sandbox-core/src/managerEntry.ts"]
+      "@sage/sandbox-core/manager": ["../../packages/sandbox-core/src/managerEntry.ts"],
+      "@sage/memory-core": ["../../packages/memory-core/src/index.ts"]
     }
   },
   "include": [

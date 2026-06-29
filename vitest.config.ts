@@ -29,6 +29,7 @@ export default defineConfig({
       '@sage/arbiter-core': pkg('./packages/arbiter-core/src/index.ts'),
       '@sage/voice-core': pkg('./packages/voice-core/src/index.ts'),
       '@sage/sandbox-core': pkg('./packages/sandbox-core/src/index.ts'),
+      '@sage/memory-core': pkg('./packages/memory-core/src/index.ts'),
     },
   },
 });

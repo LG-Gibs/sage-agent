@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import type { BackendConfig } from '../config';
+import { runDeepResearch } from '../research';
 
 /**
  * Cloud tool runtime — POST /api/sage/tools/:name.
@@ -108,13 +109,25 @@ export function toolsRouter(config: BackendConfig): Router {
     });
     const p = schema.safeParse(req.body);
     if (!p.success) return badRequest(res, p.error.message);
-    return res.json(
-      stub('deep_research', {
-        topic: p.data.topic,
-        depth: p.data.depth ?? 'standard',
-        note: 'Deep research orchestration is fleshed out in Phase 5 (Search & Synthesis).',
-      }),
-    );
+    const depth = p.data.depth ?? 'standard';
+    try {
+      const brief = await runDeepResearch(p.data.topic, depth, {
+        tavilyApiKey: config.tavilyApiKey,
+        jinaApiKey: config.jinaApiKey,
+      });
+      if (!brief) {
+        return res.json(
+          stub('deep_research', {
+            topic: p.data.topic,
+            depth,
+            note: 'Set TAVILY_API_KEY to enable live Tavily + Jina deep research.',
+          }),
+        );
+      }
+      return res.json(brief);
+    } catch (e) {
+      return upstreamError(res, e);
+    }
   });
 
   return router;

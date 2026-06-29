@@ -1,6 +1,8 @@
 import type { CapabilityManifest, InstalledModel } from '@sage/shared-types';
 import type { Responder } from '@sage/voice-core';
+import { toMemoryFragments } from '@sage/memory-core';
 import { createDeviceReActLoop } from './createReActLoop';
+import { deviceMemory } from '../memory/deviceMemory';
 import { SignalsCache } from './signalsCache';
 
 /**
@@ -27,7 +29,11 @@ export function createReActResponder(
     sink = onToken;
     try {
       await signals.refresh(transcript);
-      const result = await loop.run([{ role: 'user', content: transcript }], { signal });
+      // Constraint 5: search local memory on-device and inject the matches as
+      // opaque memories[] for the (possibly cloud) inference cycle.
+      const hits = await deviceMemory().recall(transcript, 5);
+      const memories = toMemoryFragments(hits, { minScore: 0.15, maxFragments: 5 });
+      const result = await loop.run([{ role: 'user', content: transcript }], { signal, memories });
       return result.finalText;
     } finally {
       sink = null;

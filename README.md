@@ -30,7 +30,8 @@ sage-agent/
 │   ├── tool-registry/    # authoritative two-domain registry (6 mobile / 4 cloud) + integrity check
 │   ├── arbiter-core/     # signals, classifier, manifest, gating, ArbiterRouter, ReActLoop, ToolDomainRouter (Phase 3)
 │   ├── voice-core/       # voice loop state machine + engine interfaces + latency tracker (Phase 2)
-│   └── sandbox-core/     # JsSandbox + WASM QuickJS runner + SandboxManager + benchmark (Phase 4)
+│   ├── sandbox-core/     # JsSandbox + WASM QuickJS runner + SandboxManager + benchmark (Phase 4)
+│   └── memory-core/      # offline embedder + vector store + lifecycle + injection + RAG benchmark (Phase 5)
 ├── apps/
 │   ├── backend/          # SAGE Backend v3 — stateless Express proxy + cloud tool runtime
 │   └── mobile/           # Expo Bare RN app (New Architecture) + native SageCapability module (Swift/Kotlin)
@@ -81,7 +82,7 @@ WatermelonDB + sqlite-vec + MMKV + SQLCipher · QuickJS + E2B Firecracker · Exp
 | 2 | Native shell & voice loop | ✅ delivered |
 | 3 | Arbiter Core (router, ReActLoop, dispatch) | ✅ delivered |
 | 4 | Code sandbox (QuickJS / E2B) | ✅ delivered |
-| 5 | Search & memory (sqlite-vec / Tavily) | ⏳ next |
-| 6 | Deep OS integrations | planned |
+| 5 | Search & memory (sqlite-vec / Tavily) | ✅ delivered |
+| 6 | Deep OS integrations | ⏳ next |
 
 See `docs/phase-0-1-report.md` for the detailed gate report.

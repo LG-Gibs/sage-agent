@@ -239,5 +239,6 @@ flowchart LR
 | Native signal providers + boot screen | `apps/mobile/src`, `App.tsx` | 0 ✅ |
 | Voice pipeline (Porcupine/Whisper/Piper) | `apps/mobile` | P2 |
 | QuickJS / E2B sandbox | `packages/sandbox-core`, `apps/mobile`, `apps/backend` | 4 ✅ |
-| sqlite-vec RAG | `apps/mobile` | P5 |
+| sqlite-vec RAG + memory lifecycle + injection | `packages/memory-core`, `apps/mobile/src/memory` | 5 ✅ |
+| Online research (Tavily + Jina synthesis) | `apps/backend/src/research.ts` | 5 ✅ |
 | Deep OS integrations | `apps/mobile` | P6 |
