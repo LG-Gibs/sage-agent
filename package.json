@@ -12,12 +12,13 @@
     "packages/sse-contract",
     "packages/tool-registry",
     "packages/arbiter-core",
+    "packages/voice-core",
     "apps/backend"
   ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc -b packages/shared-types packages/sse-contract packages/tool-registry packages/arbiter-core apps/backend",
+    "typecheck": "tsc -b packages/shared-types packages/sse-contract packages/tool-registry packages/arbiter-core packages/voice-core apps/backend",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
     "backend:dev": "npm run dev -w @sage/backend",

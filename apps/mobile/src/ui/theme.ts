@@ -1,0 +1,60 @@
+import { StyleSheet } from 'react-native';
+
+export const COLORS = {
+  page: '#0A0D12',
+  card: '#11151C',
+  card2: '#151A22',
+  line: 'rgba(255,255,255,0.06)',
+  text: '#EAECEF',
+  head: '#FFFFFF',
+  muted: '#969BA4',
+  dim: '#6B7079',
+  faint: '#474C54',
+  accent: '#2FBF77',
+  amber: '#FFB612',
+  red: '#E5484D',
+  blue: '#5B8DEF',
+} as const;
+
+export const ui = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: COLORS.page },
+  body: { padding: 24, paddingTop: 60, paddingBottom: 24 },
+  brand: { color: COLORS.head, fontSize: 36, fontWeight: '700' },
+  tagline: { color: COLORS.muted, fontSize: 14, marginTop: 4, marginBottom: 16 },
+  sectionTitle: {
+    color: COLORS.dim,
+    fontSize: 11,
+    letterSpacing: 1.6,
+    textTransform: 'uppercase',
+    marginTop: 22,
+    marginBottom: 8,
+  },
+  card: {
+    backgroundColor: COLORS.card,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: COLORS.line,
+    paddingHorizontal: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 13,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.line,
+  },
+  rowKey: { color: COLORS.muted, fontSize: 14 },
+  rowVal: { color: COLORS.text, fontSize: 14, fontWeight: '600' },
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderRadius: 30,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    gap: 8,
+  },
+  dot: { width: 8, height: 8, borderRadius: 4 },
+  muted: { color: COLORS.dim, fontSize: 13 },
+});

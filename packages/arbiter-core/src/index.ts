@@ -13,4 +13,5 @@ export * from './classifier/complexity';
 export * from './capability/types';
 export * from './capability/manifest';
 export * from './capability/mockProbe';
+export * from './capability/gating';
 export * from './router';

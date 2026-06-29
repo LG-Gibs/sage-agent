@@ -27,6 +27,7 @@ export default defineConfig({
       '@sage/sse-contract': pkg('./packages/sse-contract/src/index.ts'),
       '@sage/tool-registry': pkg('./packages/tool-registry/src/index.ts'),
       '@sage/arbiter-core': pkg('./packages/arbiter-core/src/index.ts'),
+      '@sage/voice-core': pkg('./packages/voice-core/src/index.ts'),
     },
   },
 });

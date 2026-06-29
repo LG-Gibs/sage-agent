@@ -28,7 +28,8 @@ sage-agent/
 │   ├── shared-types/     # canonical vocabulary: messages, tools, signals, capability, errors
 │   ├── sse-contract/     # Backend v3 SSE event types + incremental parser + symmetric serializer
 │   ├── tool-registry/    # authoritative two-domain registry (6 mobile / 4 cloud) + integrity check
-│   └── arbiter-core/     # 5 signal readers, complexity classifier, Capability Manifest (+ Phase 3 router iface)
+│   ├── arbiter-core/     # 5 signal readers, complexity classifier, Capability Manifest, feature gating (+ Phase 3 router iface)
+│   └── voice-core/       # voice loop state machine + engine interfaces + latency tracker (Phase 2)
 ├── apps/
 │   ├── backend/          # SAGE Backend v3 — stateless Express proxy + cloud tool runtime
 │   └── mobile/           # Expo Bare RN app (New Architecture) + native SageCapability module (Swift/Kotlin)
@@ -74,10 +75,10 @@ WatermelonDB + sqlite-vec + MMKV + SQLCipher · QuickJS + E2B Firecracker · Exp
 
 | Phase | Scope | Status |
 |-------|-------|--------|
-| 0 | Environment & capability detection | ✅ delivered (this thread) |
-| 1 | Architecture & compliance | ✅ delivered (this thread) |
-| 2 | Native shell & voice loop | ⏳ next |
-| 3 | Arbiter Core (router, ReActLoop, dispatch) | interfaces stubbed |
+| 0 | Environment & capability detection | ✅ delivered |
+| 1 | Architecture & compliance | ✅ delivered |
+| 2 | Native shell & voice loop | ✅ delivered |
+| 3 | Arbiter Core (router, ReActLoop, dispatch) | ⏳ next (interfaces stubbed) |
 | 4 | Code sandbox (QuickJS / E2B) | planned |
 | 5 | Search & memory (sqlite-vec / Tavily) | planned |
 | 6 | Deep OS integrations | planned |
