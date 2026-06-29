@@ -28,6 +28,7 @@ export default defineConfig({
       '@sage/tool-registry': pkg('./packages/tool-registry/src/index.ts'),
       '@sage/arbiter-core': pkg('./packages/arbiter-core/src/index.ts'),
       '@sage/voice-core': pkg('./packages/voice-core/src/index.ts'),
+      '@sage/sandbox-core': pkg('./packages/sandbox-core/src/index.ts'),
     },
   },
 });

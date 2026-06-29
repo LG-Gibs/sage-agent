@@ -238,6 +238,6 @@ flowchart LR
 | Native capability + thermal probe | `apps/mobile/modules/sage-capability` | 0 ✅ |
 | Native signal providers + boot screen | `apps/mobile/src`, `App.tsx` | 0 ✅ |
 | Voice pipeline (Porcupine/Whisper/Piper) | `apps/mobile` | P2 |
-| QuickJS / E2B sandbox | `apps/mobile`, `apps/backend` | P4 |
+| QuickJS / E2B sandbox | `packages/sandbox-core`, `apps/mobile`, `apps/backend` | 4 ✅ |
 | sqlite-vec RAG | `apps/mobile` | P5 |
 | Deep OS integrations | `apps/mobile` | P6 |

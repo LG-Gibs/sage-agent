@@ -63,18 +63,42 @@ export function toolsRouter(config: BackendConfig): Router {
     if (!config.e2bApiKey) {
       return res.json(
         stub('execute_python', {
-          note: 'E2B not configured; wire E2B_API_KEY to enable Firecracker microVM execution.',
+          note: 'E2B not configured; set E2B_API_KEY to enable Firecracker microVM execution.',
         }),
       );
     }
-    // Real E2B execution is wired in Phase 4 (Code Sandbox) via the E2B SDK.
-    return res.status(501).json({
-      error: {
-        code: 'SANDBOX_ERROR',
-        message: 'E2B execution lands in Phase 4 (Code Sandbox).',
-        retryable: false,
-      },
-    });
+    // Real E2B Firecracker microVM execution. Dynamically imported so the
+    // backend has no hard dependency on the SDK unless this path is used.
+    try {
+      // Variable specifier: keeps tsc from statically requiring the optional SDK.
+      const sdk = '@e2b/code-interpreter';
+      const mod = (await import(sdk).catch(() => null)) as {
+        Sandbox?: { create(opts: { apiKey: string }): Promise<E2BSandbox> };
+      } | null;
+      if (!mod?.Sandbox) {
+        return res.status(501).json({
+          error: {
+            code: 'SANDBOX_ERROR',
+            message: 'E2B SDK not installed. Run: npm i @e2b/code-interpreter',
+            retryable: false,
+          },
+        });
+      }
+      const sbx = await mod.Sandbox.create({ apiKey: config.e2bApiKey });
+      try {
+        const exec = await sbx.runCode(p.data.code);
+        return res.json({
+          stdout: exec.logs?.stdout ?? [],
+          stderr: exec.logs?.stderr ?? [],
+          results: exec.results ?? [],
+          error: exec.error ?? null,
+        });
+      } finally {
+        await sbx.kill?.();
+      }
+    } catch (e) {
+      return upstreamError(res, e);
+    }
   });
 
   router.post('/research', async (req, res) => {
@@ -94,6 +118,15 @@ export function toolsRouter(config: BackendConfig): Router {
   });
 
   return router;
+}
+
+interface E2BSandbox {
+  runCode(code: string): Promise<{
+    logs?: { stdout?: string[]; stderr?: string[] };
+    results?: unknown[];
+    error?: unknown;
+  }>;
+  kill?(): Promise<void>;
 }
 
 function stub(tool: string, extra: Record<string, unknown>) {

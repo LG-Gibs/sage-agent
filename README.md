@@ -28,8 +28,9 @@ sage-agent/
 │   ├── shared-types/     # canonical vocabulary: messages, tools, signals, capability, errors
 │   ├── sse-contract/     # Backend v3 SSE event types + incremental parser + symmetric serializer
 │   ├── tool-registry/    # authoritative two-domain registry (6 mobile / 4 cloud) + integrity check
-│   ├── arbiter-core/     # 5 signal readers, complexity classifier, Capability Manifest, feature gating (+ Phase 3 router iface)
-│   └── voice-core/       # voice loop state machine + engine interfaces + latency tracker (Phase 2)
+│   ├── arbiter-core/     # signals, classifier, manifest, gating, ArbiterRouter, ReActLoop, ToolDomainRouter (Phase 3)
+│   ├── voice-core/       # voice loop state machine + engine interfaces + latency tracker (Phase 2)
+│   └── sandbox-core/     # JsSandbox + WASM QuickJS runner + SandboxManager + benchmark (Phase 4)
 ├── apps/
 │   ├── backend/          # SAGE Backend v3 — stateless Express proxy + cloud tool runtime
 │   └── mobile/           # Expo Bare RN app (New Architecture) + native SageCapability module (Swift/Kotlin)
@@ -79,8 +80,8 @@ WatermelonDB + sqlite-vec + MMKV + SQLCipher · QuickJS + E2B Firecracker · Exp
 | 1 | Architecture & compliance | ✅ delivered |
 | 2 | Native shell & voice loop | ✅ delivered |
 | 3 | Arbiter Core (router, ReActLoop, dispatch) | ✅ delivered |
-| 4 | Code sandbox (QuickJS / E2B) | ⏳ next |
-| 5 | Search & memory (sqlite-vec / Tavily) | planned |
+| 4 | Code sandbox (QuickJS / E2B) | ✅ delivered |
+| 5 | Search & memory (sqlite-vec / Tavily) | ⏳ next |
 | 6 | Deep OS integrations | planned |
 
 See `docs/phase-0-1-report.md` for the detailed gate report.

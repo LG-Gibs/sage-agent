@@ -7,7 +7,9 @@
       "@sage/shared-types": ["../../packages/shared-types/src/index.ts"],
       "@sage/arbiter-core": ["../../packages/arbiter-core/src/index.ts"],
       "@sage/tool-registry": ["../../packages/tool-registry/src/index.ts"],
-      "@sage/sse-contract": ["../../packages/sse-contract/src/index.ts"]
+      "@sage/sse-contract": ["../../packages/sse-contract/src/index.ts"],
+      "@sage/voice-core": ["../../packages/voice-core/src/index.ts"],
+      "@sage/sandbox-core/manager": ["../../packages/sandbox-core/src/managerEntry.ts"]
     }
   },
   "include": [

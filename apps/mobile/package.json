@@ -25,11 +25,13 @@
     "react-native-mmkv": "^2.12.2",
     "llama.rn": "^0.4.5",
     "whisper.rn": "^0.4.0",
+    "react-native-quickjs": "^0.2.0",
     "@sage/shared-types": "file:../../packages/shared-types",
     "@sage/arbiter-core": "file:../../packages/arbiter-core",
     "@sage/tool-registry": "file:../../packages/tool-registry",
     "@sage/sse-contract": "file:../../packages/sse-contract",
-    "@sage/voice-core": "file:../../packages/voice-core"
+    "@sage/voice-core": "file:../../packages/voice-core",
+    "@sage/sandbox-core": "file:../../packages/sandbox-core"
   },
   "devDependencies": {
     "@types/react": "~18.2.79",
