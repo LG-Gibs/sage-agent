@@ -1,5 +1,9 @@
 # SAGE-AGENT
 
+[![CI](https://github.com/LG-Gibs/sage-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/LG-Gibs/sage-agent/actions/workflows/ci.yml)
+[![Node](https://img.shields.io/badge/node-%E2%89%A520-43853d)](package.json)
+[![Tests](https://img.shields.io/badge/tests-117%20passing-2FBF77)](https://github.com/LG-Gibs/sage-agent/actions/workflows/ci.yml)
+
 **An offline-first, thick-client mobile AI companion. The device is the agent; the backend extends its reach.**
 
 SAGE-AGENT combines Siri-grade OS integration, Replit-grade code execution, and
@@ -38,7 +42,8 @@ sage-agent/
 └── docs/
     ├── architecture.md       # Phase 1: full Mermaid architecture + flows
     ├── compliance.md         # Phase 1: security + App Store 2.5.2 strategy
-    └── phase-0-1-report.md    # gate report: verified vs device-bound
+    ├── device-build.md       # device build, asset & on-device validation guide
+    └── phase-0-1-report.md … phase-6-report.md   # per-phase gate reports
 ```
 
 The platform-agnostic packages hold the orchestration logic behind typed
@@ -51,7 +56,7 @@ bindings; the backend stays dumb.
 ```bash
 npm install        # installs packages/* and apps/backend (mobile is separate)
 npm run typecheck  # tsc -b across everything → 0 errors
-npm test           # 43 tests, incl. a live backend SSE smoke test
+npm test           # 117 tests, incl. a live in-process backend SSE smoke test
 
 # Run the backend (mock upstream — no API keys needed):
 npm run backend:dev      # http://localhost:8787 ; GET /health
@@ -64,8 +69,10 @@ keys live only on the server and never reach the device.**
 ## Mobile app
 
 The Expo Bare app is installed and run with the mobile toolchain — see
-[`apps/mobile/README.md`](apps/mobile/README.md). It is intentionally excluded
-from the npm workspace install.
+[`apps/mobile/README.md`](apps/mobile/README.md) for a quick start, and
+[`docs/device-build.md`](docs/device-build.md) for the full device build, model
+assets, and per-phase on-device validation walkthrough. It is intentionally
+excluded from the npm workspace install.
 
 ## Tech stack
 
