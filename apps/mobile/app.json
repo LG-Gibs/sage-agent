@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "Sage",
+    "slug": "sage-agent",
+    "version": "0.1.0",
+    "scheme": "sage",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "bundleIdentifier": "co.iterativ.sage",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSContactsUsageDescription": "Sage reads contacts on-device to look up people you ask about. Nothing leaves your phone.",
+        "NSCalendarsUsageDescription": "Sage creates and reads calendar events you ask it to manage.",
+        "NSRemindersUsageDescription": "Sage creates reminders you ask it to set.",
+        "NSMicrophoneUsageDescription": "Sage listens for the wake word and transcribes speech on-device.",
+        "NSSpeechRecognitionUsageDescription": "Sage transcribes your speech locally with Whisper.cpp."
+      }
+    },
+    "android": {
+      "package": "co.iterativ.sage",
+      "permissions": [
+        "READ_CONTACTS",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "RECORD_AUDIO"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": { "deploymentTarget": "15.1", "newArchEnabled": true },
+          "android": {
+            "minSdkVersion": 26,
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "newArchEnabled": true
+          }
+        }
+      ]
+    ]
+  }
+}

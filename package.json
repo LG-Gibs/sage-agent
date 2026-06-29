@@ -1,0 +1,37 @@
+{
+  "name": "sage-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SAGE-AGENT — offline-first, thick-client mobile AI companion. The device is the agent; the backend extends its reach.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "packages/shared-types",
+    "packages/sse-contract",
+    "packages/tool-registry",
+    "packages/arbiter-core",
+    "apps/backend"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b packages/shared-types packages/sse-contract packages/tool-registry packages/arbiter-core apps/backend",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write .",
+    "backend:dev": "npm run dev -w @sage/backend",
+    "backend:start": "npm run start -w @sage/backend"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
+  },
+  "comment": "apps/mobile is intentionally excluded from npm workspaces. React Native / Expo manage their own dependency tree and must be installed with the mobile toolchain (see apps/mobile/README.md). The container installs only the testable, platform-agnostic packages and the backend."
+}

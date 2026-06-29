@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["SageCapabilityModule"]
+  },
+  "android": {
+    "modules": ["com.iterativ.sage.capability.SageCapabilityModule"]
+  }
+}

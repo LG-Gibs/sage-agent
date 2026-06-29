@@ -1,0 +1,23 @@
+{
+  "name": "@sage/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "SAGE Backend v3 — stateless inference proxy + cloud tool runtime. Holds all upstream API keys; never loops, plans, or stores memory.",
+  "main": "./src/index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@sage/shared-types": "*",
+    "@sage/sse-contract": "*",
+    "@sage/tool-registry": "*",
+    "express": "^4.21.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21"
+  }
+}
