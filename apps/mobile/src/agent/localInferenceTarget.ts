@@ -2,7 +2,7 @@ import {
   createLocalTarget,
   type InferenceTarget,
   type LocalGenerate,
-} from '@sage/arbiter-core';
+} from '@sage/core';
 import { defaultToolRegistry } from '@sage/tool-registry';
 import type { InstalledModel, Message, ToolName } from '@sage/shared-types';
 import { createLlamaEngine } from '../inference/localEngine';

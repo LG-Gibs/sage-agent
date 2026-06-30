@@ -1,9 +1,5 @@
 # SAGE-AGENT
 
-[![CI](https://github.com/LG-Gibs/sage-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/LG-Gibs/sage-agent/actions/workflows/ci.yml)
-[![Node](https://img.shields.io/badge/node-%E2%89%A520-43853d)](package.json)
-[![Tests](https://img.shields.io/badge/tests-117%20passing-2FBF77)](https://github.com/LG-Gibs/sage-agent/actions/workflows/ci.yml)
-
 **An offline-first, thick-client mobile AI companion. The device is the agent; the backend extends its reach.**
 
 SAGE-AGENT combines Siri-grade OS integration, Replit-grade code execution, and
@@ -18,7 +14,7 @@ capability; they are never required for the app to be useful.
 ## Constitutional constraints (binding)
 
 1. **The device owns the ReAct loop.** The server runs exactly one inference cycle per request — it never plans, loops, or holds state.
-2. **The ArbiterRouter is fully on-device.** The server does an allowlist check, not a routing decision.
+2. **The SageRouter is fully on-device.** The server does an allowlist check, not a routing decision.
 3. **`POST /api/sage/infer` is a stateless proxy:** validate, forward, stream, return.
 4. **The two-domain tool registry is authoritative.** Mobile tools never run on the server; cloud tools fail when offline.
 5. **Memory is on-device and never synced.** The backend treats `memories[]` as opaque prompt text.
@@ -32,7 +28,7 @@ sage-agent/
 │   ├── shared-types/     # canonical vocabulary: messages, tools, signals, capability, errors
 │   ├── sse-contract/     # Backend v3 SSE event types + incremental parser + symmetric serializer
 │   ├── tool-registry/    # authoritative two-domain registry (6 mobile / 4 cloud) + integrity check
-│   ├── arbiter-core/     # signals, classifier, manifest, gating, ArbiterRouter, ReActLoop, ToolDomainRouter (Phase 3)
+│   ├── core/     # signals, classifier, manifest, gating, SageRouter, ReActLoop, ToolDomainRouter (Phase 3)
 │   ├── voice-core/       # voice loop state machine + engine interfaces + latency tracker (Phase 2)
 │   ├── sandbox-core/     # JsSandbox + WASM QuickJS runner + SandboxManager + benchmark (Phase 4)
 │   └── memory-core/      # offline embedder + vector store + lifecycle + injection + RAG benchmark (Phase 5)
@@ -42,8 +38,7 @@ sage-agent/
 └── docs/
     ├── architecture.md       # Phase 1: full Mermaid architecture + flows
     ├── compliance.md         # Phase 1: security + App Store 2.5.2 strategy
-    ├── device-build.md       # device build, asset & on-device validation guide
-    └── phase-0-1-report.md … phase-6-report.md   # per-phase gate reports
+    └── phase-0-1-report.md    # gate report: verified vs device-bound
 ```
 
 The platform-agnostic packages hold the orchestration logic behind typed
@@ -56,7 +51,7 @@ bindings; the backend stays dumb.
 ```bash
 npm install        # installs packages/* and apps/backend (mobile is separate)
 npm run typecheck  # tsc -b across everything → 0 errors
-npm test           # 117 tests, incl. a live in-process backend SSE smoke test
+npm test           # 43 tests, incl. a live backend SSE smoke test
 
 # Run the backend (mock upstream — no API keys needed):
 npm run backend:dev      # http://localhost:8787 ; GET /health
@@ -69,10 +64,8 @@ keys live only on the server and never reach the device.**
 ## Mobile app
 
 The Expo Bare app is installed and run with the mobile toolchain — see
-[`apps/mobile/README.md`](apps/mobile/README.md) for a quick start, and
-[`docs/device-build.md`](docs/device-build.md) for the full device build, model
-assets, and per-phase on-device validation walkthrough. It is intentionally
-excluded from the npm workspace install.
+[`apps/mobile/README.md`](apps/mobile/README.md). It is intentionally excluded
+from the npm workspace install.
 
 ## Tech stack
 
@@ -87,7 +80,7 @@ WatermelonDB + sqlite-vec + MMKV + SQLCipher · QuickJS + E2B Firecracker · Exp
 | 0 | Environment & capability detection | ✅ delivered |
 | 1 | Architecture & compliance | ✅ delivered |
 | 2 | Native shell & voice loop | ✅ delivered |
-| 3 | Arbiter Core (router, ReActLoop, dispatch) | ✅ delivered |
+| 3 | SageCore (router, ReActLoop, dispatch) | ✅ delivered |
 | 4 | Code sandbox (QuickJS / E2B) | ✅ delivered |
 | 5 | Search & memory (sqlite-vec / Tavily) | ✅ delivered |
 | 6 | Deep OS integrations | ✅ delivered |

@@ -1,4 +1,4 @@
-import type { CloudToolClient } from '@sage/arbiter-core';
+import type { CloudToolClient } from '@sage/core';
 import type { ToolCall, ToolResult } from '@sage/shared-types';
 
 const ROUTE: Record<string, string> = {

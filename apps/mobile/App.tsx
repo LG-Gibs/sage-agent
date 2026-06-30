@@ -7,13 +7,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import type { ArbiterSignals, CapabilityManifest } from '@sage/shared-types';
+import type { SageSignals, CapabilityManifest } from '@sage/shared-types';
 import {
   buildCapabilityManifest,
   deriveFeatureFlags,
   readSignalsSafe,
   type FeatureFlags,
-} from '@sage/arbiter-core';
+} from '@sage/core';
 import { createNativeCapabilityProbe } from './src/capability/nativeProbe';
 import { createNativeSignalProvider } from './src/signals/nativeSignalProvider';
 import { ensureMicPermission, getMicPermission } from './src/permissions';
@@ -25,7 +25,7 @@ type Screen = 'home' | 'voice';
 
 interface Boot {
   manifest: CapabilityManifest;
-  signals: ArbiterSignals;
+  signals: SageSignals;
   flags: FeatureFlags;
 }
 

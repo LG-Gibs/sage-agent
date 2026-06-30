@@ -6,7 +6,7 @@ device; this runs the same platform-agnostic logic live in a browser.
 
 Panels, each calling shipped code:
 - **Home** — `deriveFeatureFlags()` gating with live RAM/mic/model toggles.
-- **Router** — `ArbiterRouter.route()` over the five signals + a live run of the
+- **Router** — `SageRouter.route()` over the five signals + a live run of the
   real 50-case routing benchmark.
 - **Classify** — `classifyComplexity()` + `extractFeatures()`.
 - **Voice** — the real `VoicePipeline` state machine (demo I/O engines — no mic).

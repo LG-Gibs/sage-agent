@@ -4,7 +4,7 @@ import {
   type ToolCall,
   type ToolResult,
 } from '@sage/shared-types';
-import type { MobileToolHandler } from '@sage/arbiter-core';
+import type { MobileToolHandler } from '@sage/core';
 import { getSageOs, isPermissionError } from './sageOs';
 import type { SageOsNativeModule } from '../../modules/sage-os';
 

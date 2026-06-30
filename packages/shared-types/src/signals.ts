@@ -1,5 +1,5 @@
 /**
- * The five signals the ArbiterRouter evaluates before EVERY inference request.
+ * The five signals the SageRouter evaluates before EVERY inference request.
  * Constitutional Constraint 2: these are read on-device and the router never
  * contacts the network during evaluation.
  */
@@ -20,7 +20,7 @@ export type PrivacyContext = 'standard' | 'private' | 'sensitive';
 export type UserPreference = 'auto' | 'prefer_local' | 'prefer_cloud';
 
 /** The full signal vector evaluated per request. */
-export interface ArbiterSignals {
+export interface SageSignals {
   network: NetworkQuality;
   power: PowerState;
   complexity: TaskComplexity;
@@ -35,4 +35,4 @@ export const SIGNAL_DOMAINS = {
   complexity: ['simple', 'moderate', 'complex'] as const,
   privacy: ['standard', 'private', 'sensitive'] as const,
   preference: ['auto', 'prefer_local', 'prefer_cloud'] as const,
-} satisfies Record<keyof ArbiterSignals, readonly string[]>;
+} satisfies Record<keyof SageSignals, readonly string[]>;

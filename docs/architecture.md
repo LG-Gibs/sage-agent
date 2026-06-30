@@ -12,7 +12,7 @@ inline as **[C1]–[C6]**.
 | # | Constraint |
 |---|------------|
 | C1 | The device owns the ReAct loop. The server runs exactly one inference cycle per request. |
-| C2 | The ArbiterRouter is fully on-device. The server applies an allowlist check only — never a routing override. |
+| C2 | The SageRouter is fully on-device. The server applies an allowlist check only — never a routing override. |
 | C3 | `POST /api/sage/infer` is a stateless proxy: validate, forward, stream, return. No loop, no cross-call state. |
 | C4 | The two-domain tool registry is authoritative. Mobile tools never run on the server; cloud tools fail when offline. |
 | C5 | Memory is on-device and never synced. The backend treats `memories[]` as opaque prompt text. |
@@ -30,9 +30,9 @@ flowchart TB
       STT["Whisper.cpp STT"]
       TTS["Piper TTS"]
     end
-    subgraph ARB["Arbiter Core (C1, C2)"]
+    subgraph ARB["SageCore (C1, C2)"]
       RL["ReActLoop<br/>(owns reasoning + tool loop)"]
-      AR["ArbiterRouter<br/>(5 signals → model + target)"]
+      AR["SageRouter<br/>(5 signals → model + target)"]
       TDR["ToolDomainRouter<br/>(two-domain dispatch)"]
     end
     CAP["Capability Manifest<br/>(RAM · OS · GPU · NPU · models)"]
@@ -134,7 +134,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
   participant RL as ReActLoop (device)
-  participant AR as ArbiterRouter
+  participant AR as SageRouter
   participant API as POST /api/sage/infer
   participant UP as Upstream (OpenRouter/Foundry)
 
@@ -163,7 +163,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
   participant RL as ReActLoop (device)
-  participant AR as ArbiterRouter
+  participant AR as SageRouter
   participant LL as llama.cpp (GGUF)
   participant TDR as ToolDomainRouter
 
@@ -237,9 +237,9 @@ consistency, not a frozen count.
 | Domain vocabulary | `packages/shared-types` | 0–1 ✅ |
 | SSE contract (parser + serializer) | `packages/sse-contract` | 0–1 ✅ |
 | Two-domain registry | `packages/tool-registry` | 0–1 ✅ (dispatcher: P3) |
-| Signal readers + Capability Manifest | `packages/arbiter-core` | 0 ✅ |
-| ArbiterRouter / ReActLoop / ToolDomainRouter | `packages/arbiter-core` (`router.ts`, `agent/*`) | 3 ✅ |
-| Cloud/local inference targets + 50-case routing benchmark | `packages/arbiter-core/src/agent`, `src/benchmark` | 3 ✅ |
+| Signal readers + Capability Manifest | `packages/core` | 0 ✅ |
+| SageRouter / ReActLoop / ToolDomainRouter | `packages/core` (`router.ts`, `agent/*`) | 3 ✅ |
+| Cloud/local inference targets + 50-case routing benchmark | `packages/core/src/agent`, `src/benchmark` | 3 ✅ |
 | SAGE Backend v3 proxy | `apps/backend` | 0–1 ✅ |
 | Native capability + thermal probe | `apps/mobile/modules/sage-capability` | 0 ✅ |
 | Native signal providers + boot screen | `apps/mobile/src`, `App.tsx` | 0 ✅ |

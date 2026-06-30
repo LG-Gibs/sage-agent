@@ -12,7 +12,7 @@ export interface SageCapabilityNativeModule {
   getGpuBackend(): 'metal' | 'vulkan' | 'none';
   getMlAccelerator(): 'coreml' | 'nnapi' | 'none';
   hasNpu(): boolean;
-  /** Thermal state feeds ArbiterRouter Signal 2 (Power State). */
+  /** Thermal state feeds SageRouter Signal 2 (Power State). */
   getThermalState(): 'nominal' | 'fair' | 'serious' | 'critical';
   listInstalledModels(): Promise<
     { id: string; path: string; sizeBytes: number; verified: boolean }[]

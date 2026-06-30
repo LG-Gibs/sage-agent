@@ -28,7 +28,7 @@
     "react-native-quickjs": "^0.2.0",
     "@op-engineering/op-sqlite": "^11.0.0",
     "@sage/shared-types": "file:../../packages/shared-types",
-    "@sage/arbiter-core": "file:../../packages/arbiter-core",
+    "@sage/core": "file:../../packages/core",
     "@sage/tool-registry": "file:../../packages/tool-registry",
     "@sage/sse-contract": "file:../../packages/sse-contract",
     "@sage/voice-core": "file:../../packages/voice-core",

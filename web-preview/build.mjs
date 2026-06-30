@@ -25,7 +25,7 @@ const result = await esbuild.build({
     '@sage/shared-types': pkg('packages/shared-types/src/index.ts'),
     '@sage/sse-contract': pkg('packages/sse-contract/src/index.ts'),
     '@sage/tool-registry': pkg('packages/tool-registry/src/index.ts'),
-    '@sage/arbiter-core': pkg('packages/arbiter-core/src/index.ts'),
+    '@sage/core': pkg('packages/core/src/index.ts'),
     '@sage/voice-core': pkg('packages/voice-core/src/index.ts'),
     '@sage/memory-core': pkg('packages/memory-core/src/index.ts'),
     '@sage/sandbox-core': pkg('packages/sandbox-core/src/index.ts'),

@@ -1,10 +1,10 @@
 import {
   ReActLoop,
   ToolDomainRouter,
-  createArbiterRouter,
+  createSageRouter,
   createCloudTarget,
   type ReActHooks,
-} from '@sage/arbiter-core';
+} from '@sage/core';
 import type { CapabilityManifest, InstalledModel } from '@sage/shared-types';
 import { createLocalInferenceTarget } from './localInferenceTarget';
 import { createCloudToolClient } from './cloudToolClient';
@@ -13,7 +13,7 @@ import { SignalsCache } from './signalsCache';
 import { SAGE_BACKEND_URL } from './sageConfig';
 
 /**
- * Compose the on-device ReActLoop: ArbiterRouter + local (llama.cpp) and cloud
+ * Compose the on-device ReActLoop: SageRouter + local (llama.cpp) and cloud
  * (/api/sage/infer) targets + ToolDomainRouter (mobile handlers + cloud client).
  * The loop owns all orchestration; the server only ever runs one cycle.
  */
@@ -24,7 +24,7 @@ export function createDeviceReActLoop(
   hooks?: ReActHooks,
 ): ReActLoop {
   return new ReActLoop({
-    arbiter: createArbiterRouter(),
+    router: createSageRouter(),
     capability: manifest,
     readSignals: () => signals.current(),
     targets: {

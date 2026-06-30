@@ -5,7 +5,7 @@ import { getThermalState } from '../native/sageCapability';
 /**
  * Signal 2 — Device Power State. Combines the OS battery API with the thermal
  * guard: a critical thermal state immediately yields `critical`, which the
- * ArbiterRouter treats as a hard local override. This is exactly the spec's
+ * SageRouter treats as a hard local override. This is exactly the spec's
  * "Thermal & Battery Guard ... feeds Signal 2" wiring — not a separate module.
  */
 export async function readPower(): Promise<PowerState> {

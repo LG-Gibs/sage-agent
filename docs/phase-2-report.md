@@ -7,7 +7,7 @@ Lead Developer hand-off. Same verification legend as Phase 0–1:
 
 | Item | Status | Location |
 |------|--------|----------|
-| RN UI bootstrap with capability-aware feature gating | 📦 shell / ✅ gating logic | `apps/mobile/App.tsx`, `src/ui/HomeScreen.tsx`, `src/ui/VoiceScreen.tsx`; `packages/arbiter-core/src/capability/gating.ts` |
+| RN UI bootstrap with capability-aware feature gating | 📦 shell / ✅ gating logic | `apps/mobile/App.tsx`, `src/ui/HomeScreen.tsx`, `src/ui/VoiceScreen.tsx`; `packages/core/src/capability/gating.ts` |
 | Voice pipeline orchestrator (state machine) | ✅ | `packages/voice-core/src/pipeline.ts` |
 | Porcupine wake word → Whisper.cpp STT → response → Piper TTS | 📦 | `apps/mobile/src/voice/{wakeWord,stt,tts}.ts`, `modules/sage-tts/*` |
 | Offline responder bridging STT→TTS (pre-Phase-3) | 📦 | `apps/mobile/src/responder/localResponder.ts` |
@@ -74,6 +74,6 @@ one marked TODO (text → phonemes) before VITS inference. Everything downstream
 
 Phase 2 deliverables are complete; all container-runnable criteria pass (58
 tests, clean typecheck). The two device-bound success criteria have complete
-code and documented validation. **Recommend proceeding to Phase 3 (Arbiter Core:
-ArbiterRouter, ReActLoop, ToolDomainRouter) on approval** — the voice loop's
+code and documented validation. **Recommend proceeding to Phase 3 (SageCore:
+SageRouter, ReActLoop, ToolDomainRouter) on approval** — the voice loop's
 responder is the seam where the ReActLoop drops in.

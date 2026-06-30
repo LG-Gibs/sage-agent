@@ -1,4 +1,4 @@
-# SAGE-AGENT — Phase 3 Report (Arbiter Core, ReActLoop & ToolDomainRouter)
+# SAGE-AGENT — Phase 3 Report (SageCore, ReActLoop & ToolDomainRouter)
 
 Legend: ✅ **Verified here** · 📦 **Code complete, device-bound**.
 
@@ -6,12 +6,12 @@ Legend: ✅ **Verified here** · 📦 **Code complete, device-bound**.
 
 | Item | Status | Location |
 |------|--------|----------|
-| ArbiterRouter — 5-signal engine: hard overrides, soft guidance, default path | ✅ | `packages/arbiter-core/src/router.ts` |
-| ReActLoop — mobile-owned orchestration (local + cloud), graceful degradation | ✅ | `packages/arbiter-core/src/agent/reactLoop.ts` |
-| ToolDomainRouter — two-domain dispatch for all 10 tools | ✅ | `packages/arbiter-core/src/agent/toolDomainRouter.ts` |
+| SageRouter — 5-signal engine: hard overrides, soft guidance, default path | ✅ | `packages/core/src/router.ts` |
+| ReActLoop — mobile-owned orchestration (local + cloud), graceful degradation | ✅ | `packages/core/src/agent/reactLoop.ts` |
+| ToolDomainRouter — two-domain dispatch for all 10 tools | ✅ | `packages/core/src/agent/toolDomainRouter.ts` |
 | SSE stream parser — all five event types incl. heartbeat | ✅ | `packages/sse-contract` (Phase 1) consumed by `agent/cloudTarget.ts` |
 | Two-domain tool registry (typed, complete) | ✅ | `packages/tool-registry` (Phase 1) |
-| Cloud inference target (real fetch + SSE) | ✅ | `packages/arbiter-core/src/agent/cloudTarget.ts` |
+| Cloud inference target (real fetch + SSE) | ✅ | `packages/core/src/agent/cloudTarget.ts` |
 | Local inference target adapter + tool-call parsing | ✅ logic / 📦 engine | `agent/localTarget.ts`; mobile `src/agent/localInferenceTarget.ts` |
 | On-device ReActLoop composition + voice responder seam | 📦 | mobile `src/agent/{createReActLoop,reactResponder,cloudToolClient,mobileToolHandlers,signalsCache}.ts` |
 
@@ -19,8 +19,8 @@ Legend: ✅ **Verified here** · 📦 **Code complete, device-bound**.
 
 | Criterion | Status | Evidence |
 |-----------|--------|----------|
-| ArbiterRouter classifies 10 distinct scenarios ⟵ A→B gate | ✅ | `test/router.test.ts` — offline, critical battery, sensitive, prefer_local, poor+simple, low+moderate, cloud defaults (simple→efficient, complex→capable), prefer_cloud override, stacked overrides. |
-| ArbiterRouter ≥85% agreement on 50-case benchmark ⟵ B→C gate | ✅ | `test/routingBenchmark.test.ts` + `benchmark/routingCases.ts` — 50 expert-labelled cases; **100% agreement** (≥85% required). |
+| SageRouter classifies 10 distinct scenarios ⟵ A→B gate | ✅ | `test/router.test.ts` — offline, critical battery, sensitive, prefer_local, poor+simple, low+moderate, cloud defaults (simple→efficient, complex→capable), prefer_cloud override, stacked overrides. |
+| SageRouter ≥85% agreement on 50-case benchmark ⟵ B→C gate | ✅ | `test/routingBenchmark.test.ts` + `benchmark/routingCases.ts` — 50 expert-labelled cases; **100% agreement** (≥85% required). |
 | ReActLoop completes 5 task types (research, code, contacts, calendar, RAG) | ✅ | `test/reactLoop.test.ts` — each runs tool_call → dispatch → result → final text. |
 | ToolDomainRouter routes all 10 tools; cloud→OFFLINE when offline | ✅ | `test/toolDomainRouter.test.ts` — correct domain per tool, registry authority over the call's stamp, OFFLINE envelope offline. |
 | SSE parses all five event types incl. heartbeat | ✅ | `sse-contract` parser tests (13) + the live integration below. |

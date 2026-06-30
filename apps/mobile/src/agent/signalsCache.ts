@@ -1,5 +1,5 @@
-import { readSignalsSafe } from '@sage/arbiter-core';
-import type { ArbiterSignals } from '@sage/shared-types';
+import { readSignalsSafe } from '@sage/core';
+import type { SageSignals } from '@sage/shared-types';
 import { createNativeSignalProvider } from '../signals/nativeSignalProvider';
 
 /**
@@ -8,7 +8,7 @@ import { createNativeSignalProvider } from '../signals/nativeSignalProvider';
  * call refresh() before a run (and the loop reads current() each cycle).
  */
 export class SignalsCache {
-  private snapshot: ArbiterSignals = {
+  private snapshot: SageSignals = {
     network: 'offline',
     power: 'normal',
     complexity: 'simple',
@@ -17,11 +17,11 @@ export class SignalsCache {
   };
   private readonly provider = createNativeSignalProvider();
 
-  current(): ArbiterSignals {
+  current(): SageSignals {
     return this.snapshot;
   }
 
-  async refresh(taskText: string): Promise<ArbiterSignals> {
+  async refresh(taskText: string): Promise<SageSignals> {
     const result = await readSignalsSafe(this.provider, { taskText });
     this.snapshot = result.signals;
     return this.snapshot;

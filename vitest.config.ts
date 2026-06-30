@@ -6,7 +6,7 @@ const pkg = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 /**
  * Root Vitest config.
  *
- * The Arbiter Core, tool registry and SSE contract are deliberately
+ * The SageCore, tool registry and SSE contract are deliberately
  * platform-agnostic TypeScript so the governance-gate logic can be exercised
  * here, with no device or native toolchain. Aliases below resolve the
  * `@sage/*` workspace packages directly to their TypeScript sources so tests
@@ -26,7 +26,7 @@ export default defineConfig({
       '@sage/shared-types': pkg('./packages/shared-types/src/index.ts'),
       '@sage/sse-contract': pkg('./packages/sse-contract/src/index.ts'),
       '@sage/tool-registry': pkg('./packages/tool-registry/src/index.ts'),
-      '@sage/arbiter-core': pkg('./packages/arbiter-core/src/index.ts'),
+      '@sage/core': pkg('./packages/core/src/index.ts'),
       '@sage/voice-core': pkg('./packages/voice-core/src/index.ts'),
       '@sage/sandbox-core': pkg('./packages/sandbox-core/src/index.ts'),
       '@sage/memory-core': pkg('./packages/memory-core/src/index.ts'),

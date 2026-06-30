@@ -1,5 +1,5 @@
 /**
- * The ArbiterRouter's output. Constitutional Constraint 2: routing happens
+ * The SageRouter's output. Constitutional Constraint 2: routing happens
  * entirely on-device. The server accepts `model` as an allowlist check only —
  * it never overrides this decision.
  */

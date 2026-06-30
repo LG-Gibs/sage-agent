@@ -4,15 +4,15 @@
  * the actual shipped logic; only the voice I/O engines are demo stubs (no mic in
  * a sandboxed page) and QuickJS uses an embedded-wasm module.
  */
-import type { ArbiterSignals, CapabilityManifest } from '@sage/shared-types';
+import type { SageSignals, CapabilityManifest } from '@sage/shared-types';
 import type { Responder, SttEngine, TtsEngine, VoiceState } from '@sage/voice-core';
 import {
-  createArbiterRouter,
+  createSageRouter,
   runRoutingBenchmark,
   deriveFeatureFlags,
   classifyComplexity,
   extractFeatures,
-} from '@sage/arbiter-core';
+} from '@sage/core';
 import { VoicePipeline } from '@sage/voice-core';
 import {
   MemoryManager,
@@ -27,7 +27,7 @@ import { newQuickJSWASMModuleFromVariant } from 'quickjs-emscripten-core';
 const app = document.getElementById('app') as HTMLElement;
 const tabsEl = document.getElementById('tabs') as HTMLElement;
 const esc = (s: unknown) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] as string));
-const router = createArbiterRouter();
+const router = createSageRouter();
 
 function capableManifest(over: Partial<CapabilityManifest> = {}): CapabilityManifest {
   return {
@@ -114,8 +114,8 @@ function wireCapability(root: HTMLElement) {
   recompute();
 }
 
-// ─────────────────────────── Arbiter Router ───────────────────────────
-const SIGNAL_OPTS: Record<keyof ArbiterSignals, string[]> = {
+// ─────────────────────────── Sage Router ───────────────────────────
+const SIGNAL_OPTS: Record<keyof SageSignals, string[]> = {
   network: ['offline', 'poor', 'fair', 'good'],
   power: ['critical', 'low', 'normal', 'charging'],
   complexity: ['simple', 'moderate', 'complex'],
@@ -123,14 +123,14 @@ const SIGNAL_OPTS: Record<keyof ArbiterSignals, string[]> = {
   preference: ['auto', 'prefer_local', 'prefer_cloud'],
 };
 function panelRouter(): string {
-  const sel = (k: keyof ArbiterSignals, def: string) =>
+  const sel = (k: keyof SageSignals, def: string) =>
     `<div class="field"><label>${k}</label><select id="sig-${k}">${SIGNAL_OPTS[k]
       .map((o) => `<option ${o === def ? 'selected' : ''}>${o}</option>`)
       .join('')}</select></div>`;
   return `
-  <div class="eyebrow">Arbiter Core · 5-signal router</div>
+  <div class="eyebrow">SageCore · 5-signal router</div>
   <div class="h">Where does it run?</div>
-  <p class="sub">The real <b>ArbiterRouter.route()</b> decides local vs cloud — on-device, no network.</p>
+  <p class="sub">The real <b>SageRouter.route()</b> decides local vs cloud — on-device, no network.</p>
   <div class="grid2">${sel('network', 'good')}${sel('power', 'normal')}${sel('complexity', 'moderate')}${sel('privacy', 'standard')}</div>
   ${sel('preference', 'auto')}
   <div class="card" id="decision"></div>
@@ -139,12 +139,12 @@ function panelRouter(): string {
 }
 function wireRouter(root: HTMLElement) {
   const cap = capableManifest();
-  const read = (): ArbiterSignals => ({
-    network: (root.querySelector('#sig-network') as HTMLSelectElement).value as ArbiterSignals['network'],
-    power: (root.querySelector('#sig-power') as HTMLSelectElement).value as ArbiterSignals['power'],
-    complexity: (root.querySelector('#sig-complexity') as HTMLSelectElement).value as ArbiterSignals['complexity'],
-    privacy: (root.querySelector('#sig-privacy') as HTMLSelectElement).value as ArbiterSignals['privacy'],
-    preference: (root.querySelector('#sig-preference') as HTMLSelectElement).value as ArbiterSignals['preference'],
+  const read = (): SageSignals => ({
+    network: (root.querySelector('#sig-network') as HTMLSelectElement).value as SageSignals['network'],
+    power: (root.querySelector('#sig-power') as HTMLSelectElement).value as SageSignals['power'],
+    complexity: (root.querySelector('#sig-complexity') as HTMLSelectElement).value as SageSignals['complexity'],
+    privacy: (root.querySelector('#sig-privacy') as HTMLSelectElement).value as SageSignals['privacy'],
+    preference: (root.querySelector('#sig-preference') as HTMLSelectElement).value as SageSignals['preference'],
   });
   const out = root.querySelector('#decision') as HTMLElement;
   function decide() {
@@ -173,7 +173,7 @@ function wireRouter(root: HTMLElement) {
 // ─────────────────────────── Classifier ───────────────────────────
 function panelClassifier(): string {
   return `
-  <div class="eyebrow">Arbiter Core · Signal 3</div>
+  <div class="eyebrow">SageCore · Signal 3</div>
   <div class="h">Task complexity</div>
   <p class="sub">Type a request — the real on-device <b>classifyComplexity()</b> buckets it live.</p>
   <div class="field"><label>user request</label><textarea id="ctext">Research the top 5 competitors, compare their pricing, and then synthesize a one-page brief citing sources.</textarea></div>

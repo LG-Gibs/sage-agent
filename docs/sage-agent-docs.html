@@ -324,7 +324,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <li>On-device semantic memory (sqlite-vec HNSW) with lifecycle management</li>
     <li>Deep OS integrations: Contacts, Calendar, Reminders, sandboxed File System</li>
     <li>SAGE Backend v3 — a stateless cloud inference proxy (no server-side loops or memory)</li>
-    <li>Adaptive cloud routing via an on-device ArbiterRouter evaluating 5 real-time signals</li>
+    <li>Adaptive cloud routing via an on-device SageRouter evaluating 5 real-time signals</li>
     <li>Graceful degradation hierarchy from capable-cloud to on-device to error surface</li>
   </ul>
 
@@ -342,7 +342,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <p>These are binding business rules that cannot be overridden by any implementation decision. Violations constitute a product defect, not a trade-off.</p>
 
   <div class="constraint"><div class="num">C1</div><div class="body"><strong>Device Owns the Intelligence Loop</strong><p>The mobile device drives all reasoning and tool orchestration. The cloud server executes exactly one inference cycle per request and returns. No server-side planning, looping, or state between calls. Business reason: prevents cloud lock-in and preserves offline capability.</p></div></div>
-  <div class="constraint"><div class="num">C2</div><div class="body"><strong>Routing Decisions Are Never Made Server-Side</strong><p>The on-device ArbiterRouter selects model and target (local vs cloud). The server applies an allowlist check only — it never overrides the device's routing decision. Business reason: routing decisions expose user context; they must not leave the device.</p></div></div>
+  <div class="constraint"><div class="num">C2</div><div class="body"><strong>Routing Decisions Are Never Made Server-Side</strong><p>The on-device SageRouter selects model and target (local vs cloud). The server applies an allowlist check only — it never overrides the device's routing decision. Business reason: routing decisions expose user context; they must not leave the device.</p></div></div>
   <div class="constraint"><div class="num">C3</div><div class="body"><strong>The Backend Is a Stateless Proxy</strong><p>POST /api/sage/infer validates, forwards to the upstream, streams back, and returns. No state persists between calls. Business reason: a stateless backend cannot be subpoenaed for user conversation history.</p></div></div>
   <div class="constraint"><div class="num">C4</div><div class="body"><strong>Two-Domain Tool Registry Is Authoritative</strong><p>Every tool is categorized as either mobile (on-device, offline) or cloud (requires connectivity). A mobile tool never executes on the server; a cloud tool never executes without connectivity. Business reason: prevents accidental data exfiltration via tool arguments.</p></div></div>
   <div class="constraint"><div class="num">C5</div><div class="body"><strong>Memory Is On-Device and Never Synced</strong><p>The sqlite-vec memory store is local-only. The backend receives memories as opaque prompt text and never stores, searches, ranks, or embeds them. Deletion is real — no shadow copy. Business reason: this is the foundation of the data sovereignty promise.</p></div></div>
@@ -355,8 +355,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <tr><td>Apple App Store rejection for QuickJS code execution</td><td>Low</td><td>Critical</td><td>Strict sandboxing (isolated context, no native bridge); no dynamically-downloaded code modifies core app functionality. Documented 2.5.2 compliance strategy.</td></tr>
       <tr><td>GGUF model weights too large for App Store binary size limits</td><td>Medium</td><td>High</td><td>Models are downloaded at first launch from a separate CDN, not bundled in the IPA/APK.</td></tr>
       <tr><td>llama.cpp GGUF API changes breaking the mobile binding</td><td>Medium</td><td>Medium</td><td>The llama.rn / llama.cpp binding is behind the LocalGenerate interface; swapping the engine doesn't touch the pipeline.</td></tr>
-      <tr><td>Upstream provider rate limits / price changes</td><td>High</td><td>Low-Medium</td><td>The ArbiterRouter defaults to local inference for most tasks. Cloud is optional, not required.</td></tr>
-      <tr><td>Thermal throttling on lower-end devices degrading voice latency</td><td>Medium</td><td>Medium</td><td>Thermal state feeds ArbiterRouter Signal 2 (Power State); the router routes to the efficient model or cloud under thermal pressure.</td></tr>
+      <tr><td>Upstream provider rate limits / price changes</td><td>High</td><td>Low-Medium</td><td>The SageRouter defaults to local inference for most tasks. Cloud is optional, not required.</td></tr>
+      <tr><td>Thermal throttling on lower-end devices degrading voice latency</td><td>Medium</td><td>Medium</td><td>Thermal state feeds SageRouter Signal 2 (Power State); the router routes to the efficient model or cloud under thermal pressure.</td></tr>
       <tr><td>sqlite-vec HNSW index corruption on app crash</td><td>Low</td><td>Medium</td><td>SQLCipher with WAL mode; memory store rebuilds from text if the index is corrupted (text is the source of truth).</td></tr>
     </tbody>
   </table>
@@ -368,7 +368,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="metric"><div class="v">&lt;500ms</div><div class="k">Voice I/O latency (STT compute + TTS start)</div></div>
     <div class="metric"><div class="v">&lt;100ms</div><div class="k">Top-5 memory retrieval @ 100k vectors</div></div>
     <div class="metric"><div class="v">≥80%</div><div class="k">Session tasks completed without cloud escalation</div></div>
-    <div class="metric"><div class="v">≥85%</div><div class="k">ArbiterRouter agreement with expert routing benchmark (50 cases)</div></div>
+    <div class="metric"><div class="v">≥85%</div><div class="k">SageRouter agreement with expert routing benchmark (50 cases)</div></div>
     <div class="metric"><div class="v">≥99%</div><div class="k">QuickJS execution benchmark pass rate</div></div>
     <div class="metric"><div class="v">≥95%</div><div class="k">Native OS tool task completion rate</div></div>
   </div>
@@ -421,10 +421,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <p><strong>Online:</strong> Tavily web search + Jina Reader page fetch, orchestrated by the mobile ReActLoop using cloud domain tools.</p>
     </div>
     <div class="section">
-      <h3>Pillar D — Arbiter Core</h3>
+      <h3>Pillar D — SageCore</h3>
       <p>The on-device orchestration brain. Three independently testable components:</p>
       <ul>
-        <li><strong>ArbiterRouter</strong> — evaluates 5 signals, selects model/target</li>
+        <li><strong>SageRouter</strong> — evaluates 5 signals, selects model/target</li>
         <li><strong>ReActLoop</strong> — drives all reasoning and tool orchestration</li>
         <li><strong>ToolDomainRouter</strong> — two-domain dispatch for all 13 tools</li>
       </ul>
@@ -473,7 +473,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <tr><td>FR-03</td><td>On-device text-to-speech via Piper VITS ONNX; functions entirely offline</td><td>Must</td><td>2</td></tr>
       <tr><td>FR-04</td><td>Push-to-talk as fallback when wake word is unavailable</td><td>Must</td><td>2</td></tr>
       <tr><td>FR-05</td><td>Barge-in: new push-to-talk cancels and replaces an active speaking turn</td><td>Must</td><td>2</td></tr>
-      <tr><td>FR-06</td><td>ArbiterRouter evaluates 5 signals (network, power, complexity, privacy, preference) on-device before every inference cycle</td><td>Must</td><td>3</td></tr>
+      <tr><td>FR-06</td><td>SageRouter evaluates 5 signals (network, power, complexity, privacy, preference) on-device before every inference cycle</td><td>Must</td><td>3</td></tr>
       <tr><td>FR-07</td><td>Hard routing overrides: offline, critical battery, sensitive privacy, prefer_local → always local, no exceptions</td><td>Must</td><td>3</td></tr>
       <tr><td>FR-08</td><td>Graceful degradation hierarchy: capable-cloud → efficient-cloud → local-default → local-efficient → error surface</td><td>Must</td><td>3</td></tr>
       <tr><td>FR-09</td><td>Local JS execution in an isolated QuickJS context (no host globals, enforced memory/time limits)</td><td>Must</td><td>4</td></tr>
@@ -512,8 +512,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <table>
     <thead><tr><th>Feature Area</th><th>Gate</th><th>Threshold</th><th>Actual Result</th></tr></thead>
     <tbody>
-      <tr><td>Capability Detection</td><td>All 5 ArbiterRouter signals return valid values at cold start</td><td>100% valid domain values</td><td>✅ Verified (unit tests)</td></tr>
-      <tr><td>Routing Intelligence</td><td>ArbiterRouter classifies 10 distinct signal-combination scenarios</td><td>All 10 correct (A→B gate)</td><td>✅ 10/10</td></tr>
+      <tr><td>Capability Detection</td><td>All 5 SageRouter signals return valid values at cold start</td><td>100% valid domain values</td><td>✅ Verified (unit tests)</td></tr>
+      <tr><td>Routing Intelligence</td><td>SageRouter classifies 10 distinct signal-combination scenarios</td><td>All 10 correct (A→B gate)</td><td>✅ 10/10</td></tr>
       <tr><td>Routing Intelligence</td><td>50-case expert routing benchmark</td><td>≥85% agreement (B→C gate)</td><td>✅ 100% (50/50)</td></tr>
       <tr><td>Agent Loop</td><td>ReActLoop completes 5 multi-tool task types without error</td><td>All 5 complete</td><td>✅ Verified</td></tr>
       <tr><td>Agent Loop</td><td>Tool-loop completion rate across integration test suite</td><td>≥99%</td><td>✅ 100% (25/25)</td></tr>
@@ -528,10 +528,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
   <h2 id="prd-7" class="doc-section">7. Dependencies & Milestones</h2>
   <div class="timeline">
-    <div class="tl-item"><div class="tl-head">Phase 0 — Environment & Capability Detection <span class="badge b-green">Complete</span></div><p>Expo Bare scaffold (New Architecture), native Capability Manifest (Swift/Kotlin), 5-signal ArbiterRouter readers, Gemma 4 2B first token on device.</p></div>
+    <div class="tl-item"><div class="tl-head">Phase 0 — Environment & Capability Detection <span class="badge b-green">Complete</span></div><p>Expo Bare scaffold (New Architecture), native Capability Manifest (Swift/Kotlin), 5-signal SageRouter readers, Gemma 4 2B first token on device.</p></div>
     <div class="tl-item"><div class="tl-head">Phase 1 — Architecture & Compliance <span class="badge b-green">Complete</span></div><p>Full Mermaid system architecture. App Store 2.5.2 strategy. SQLCipher + Keychain/Keystore design. No-upstream-key-on-device confirmation.</p></div>
     <div class="tl-item"><div class="tl-head">Phase 2 — Native Shell & Voice Loop <span class="badge b-green">Complete</span></div><p>Full audio pipeline: Porcupine → Whisper.cpp → model → Piper. Barge-in, graceful degradation, latency tracking. Capability-gated Home + Voice UI screens.</p></div>
-    <div class="tl-item"><div class="tl-head">Phase 3 — Arbiter Core <span class="badge b-green">Complete</span></div><p>ArbiterRouter (5-signal, hard overrides, soft guidance, cloud tiers). ReActLoop (local + cloud targets, graceful degradation hierarchy). ToolDomainRouter (13 tools, authoritative two-domain dispatch). Live backend integration test.</p></div>
+    <div class="tl-item"><div class="tl-head">Phase 3 — SageCore <span class="badge b-green">Complete</span></div><p>SageRouter (5-signal, hard overrides, soft guidance, cloud tiers). ReActLoop (local + cloud targets, graceful degradation hierarchy). ToolDomainRouter (13 tools, authoritative two-domain dispatch). Live backend integration test.</p></div>
     <div class="tl-item"><div class="tl-head">Phase 4 — Code Sandbox <span class="badge b-green">Complete</span></div><p>QuickJS WASM sandbox (isolation proven, 38/38 benchmark). SandboxManager (local + E2B paths). execute_js, render_prototype, execute_python handlers wired.</p></div>
     <div class="tl-item"><div class="tl-head">Phase 5 — Search & Memory <span class="badge b-green">Complete</span></div><p>sqlite-vec offline RAG pipeline (offline embedder, lifecycle, injection). Tavily + Jina online research. search_local_memory handler. Privacy audit passing.</p></div>
     <div class="tl-item"><div class="tl-head">Phase 6 — Deep OS Integrations <span class="badge b-green">Complete</span></div><p>SageOs native module (Swift + Kotlin): Contacts, Calendar, Reminders, sandboxed Files. PERMISSION_DENIED graceful handling. 100% native-tool benchmark.</p></div>
@@ -542,7 +542,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th><th>Fallback if unavailable</th></tr></thead>
     <tbody>
       <tr><td>Picovoice Porcupine</td><td>SDK + Access Key</td><td>Always-on wake word</td><td>Push-to-talk mode (app still works)</td></tr>
-      <tr><td>llama.rn (llama.cpp)</td><td>Native library</td><td>On-device GGUF inference</td><td>Cloud-only mode via ArbiterRouter</td></tr>
+      <tr><td>llama.rn (llama.cpp)</td><td>Native library</td><td>On-device GGUF inference</td><td>Cloud-only mode via SageRouter</td></tr>
       <tr><td>whisper.rn</td><td>Native library</td><td>On-device STT</td><td>Web Speech API (degraded, online only)</td></tr>
       <tr><td>ONNX Runtime</td><td>Native library</td><td>Piper TTS voice synthesis</td><td>Text-only responses (TTS disabled)</td></tr>
       <tr><td>OpenRouter / Azure AI Foundry</td><td>Cloud API</td><td>Frontier model inference</td><td>Local model only (offline mode)</td></tr>
@@ -583,7 +583,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <h3>Device Responsibilities (everything that touches user data)</h3>
     <ul>
       <li>All reasoning and tool orchestration (the ReActLoop)</li>
-      <li>Routing decisions (the ArbiterRouter)</li>
+      <li>Routing decisions (the SageRouter)</li>
       <li>Memory storage, retrieval, and relevance scoring (sqlite-vec)</li>
       <li>Local inference (llama.cpp GGUF)</li>
       <li>Voice pipeline (Porcupine → Whisper.cpp → Piper)</li>
@@ -607,10 +607,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <table>
     <thead><tr><th>Package</th><th>Responsibility</th><th>Key Exports</th></tr></thead>
     <tbody>
-      <tr><td><code>@sage/shared-types</code></td><td>Canonical domain vocabulary: zero runtime dependencies, types and constants only</td><td>ToolCall, ToolResult, ArbiterSignals, CapabilityManifest, MemoryFragment, SseStreamEvent, SageError</td></tr>
+      <tr><td><code>@sage/shared-types</code></td><td>Canonical domain vocabulary: zero runtime dependencies, types and constants only</td><td>ToolCall, ToolResult, SageSignals, CapabilityManifest, MemoryFragment, SseStreamEvent, SageError</td></tr>
       <tr><td><code>@sage/sse-contract</code></td><td>Backend v3 SSE wire format: 5 event types + incremental parser + symmetric serializer</td><td>SseParser, serializeSseEvent, decodeSseStream</td></tr>
       <tr><td><code>@sage/tool-registry</code></td><td>Authoritative two-domain registry (9 mobile / 4 cloud) with runtime integrity check</td><td>ToolRegistry, defaultToolRegistry, TOOL_DEFINITIONS</td></tr>
-      <tr><td><code>@sage/arbiter-core</code></td><td>5-signal ArbiterRouter, ReActLoop (cloud+local targets), ToolDomainRouter, 50-case benchmark</td><td>createArbiterRouter, ReActLoop, ToolDomainRouter, runRoutingBenchmark</td></tr>
+      <tr><td><code>@sage/core</code></td><td>5-signal SageRouter, ReActLoop (cloud+local targets), ToolDomainRouter, 50-case benchmark</td><td>createSageRouter, ReActLoop, ToolDomainRouter, runRoutingBenchmark</td></tr>
       <tr><td><code>@sage/voice-core</code></td><td>VoicePipeline state machine, engine interfaces, latency tracker, mock engines</td><td>VoicePipeline, WakeWordEngine, SttEngine, TtsEngine, CycleLatency</td></tr>
       <tr><td><code>@sage/sandbox-core</code></td><td>JsSandbox contract + WASM QuickJS runner + SandboxManager + 38-case benchmark</td><td>createQuickJsWasmSandbox, SandboxManager, runJsBenchmark</td></tr>
       <tr><td><code>@sage/memory-core</code></td><td>Offline embedder, vector stores, MemoryManager lifecycle, opaque injection, session sim</td><td>MemoryManager, InMemoryVectorStore, createHashingEmbedder, toMemoryFragments</td></tr>
@@ -624,7 +624,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <h3>3.1 The ReActLoop — Mobile-Owned Orchestration</h3>
   <p>The ReActLoop is the central intelligence loop. It runs entirely on-device; the server never knows how many iterations have occurred. Each cycle:</p>
   <ol>
-    <li>Calls ArbiterRouter → gets <code>{model, target, rationale}</code></li>
+    <li>Calls SageRouter → gets <code>{model, target, rationale}</code></li>
     <li>If <code>target=local</code>: runs on-device via llama.cpp binding (LocalInferenceTarget)</li>
     <li>If <code>target=cloud</code>: calls POST /api/sage/infer and consumes the SSE stream (CloudInferenceTarget)</li>
     <li>On <code>tool_call</code> event: delegates to ToolDomainRouter</li>
@@ -633,7 +633,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <li>On retryable error: descends the graceful degradation hierarchy</li>
   </ol>
 
-  <h3>3.2 The ArbiterRouter — 5-Signal Evaluation</h3>
+  <h3>3.2 The SageRouter — 5-Signal Evaluation</h3>
   <p>Evaluates exactly 5 signals before every inference request. Never contacts the network during evaluation.</p>
   <table>
     <thead><tr><th>Signal</th><th>Source</th><th>Values</th><th>Hard Override</th></tr></thead>
@@ -680,7 +680,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   ready: <span style="color:#CE9178">boolean</span>       <span style="color:#6A9955">// signalsReady AND hasVerifiedModel</span>
 }</div>
 
-  <h3>4.3 Routing Decision (output of ArbiterRouter)</h3>
+  <h3>4.3 Routing Decision (output of SageRouter)</h3>
   <div class="type-block"><span style="color:#9CDCFE">RoutingDecision</span> {
   model: <span style="color:#CE9178">string</span>      <span style="color:#6A9955">// e.g. 'gemma-4-2b' or 'anthropic/claude-sonnet-4'</span>
   target: <span style="color:#CE9178">'local'|'cloud'</span>
@@ -757,7 +757,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <h3>7.1 Local Target Cycle (Offline / Hard Override)</h3>
   <pre><code>User voice/text
   → ReActLoop.run(messages, memories)
-  → ArbiterRouter.route({signals, capability})
+  → SageRouter.route({signals, capability})
   → { model: 'gemma-4-2b', target: 'local' }     ← hard override (offline/critical/sensitive/prefer_local)
   → LocalInferenceTarget.run(messages)
   → llama.cpp GGUF on-device inference (Metal/Vulkan)
@@ -771,7 +771,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <pre><code>User voice/text
   → ReActLoop.run(messages, memories)
   → MemoryManager.recall(transcript, 5)           ← on-device, never sent raw
-  → ArbiterRouter.route({signals, capability})
+  → SageRouter.route({signals, capability})
   → { model: 'anthropic/claude-sonnet-4', target: 'cloud' }
   → CloudInferenceTarget.fetch(POST /api/sage/infer, {
       model, messages, memories: [...opaque fragments...]
@@ -845,7 +845,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="api-body">
       <p><strong>Request Body (Zod validated):</strong></p>
 <pre><code>{
-  model: string,            // ArbiterRouter's selection; allowlist-checked server-side only
+  model: string,            // SageRouter's selection; allowlist-checked server-side only
   target?: 'cloud',         // optional; server only handles cloud target
   messages: Message[],      // full conversation context
   memories?: MemoryFragment[], // opaque fragments from sqlite-vec; backend treats as prompt text
@@ -944,7 +944,7 @@ Body: OpenAI-compatible /chat/completions JSON with stream: true</code></pre>
 
   <h2 id="tsd-4" class="doc-section">4. Algorithm Specifications</h2>
 
-  <h3>4.1 ArbiterRouter Routing Algorithm</h3>
+  <h3>4.1 SageRouter Routing Algorithm</h3>
   <p>Evaluated in strict precedence order. The output is <code>RoutingDecision {model, target, rationale}</code>:</p>
   <pre><code>function route(signals, capability):
 
@@ -1067,11 +1067,11 @@ function relevanceScore(record, now):
   <table>
     <thead><tr><th>Gate</th><th>File</th><th>Threshold</th><th>Verified Result</th></tr></thead>
     <tbody>
-      <tr><td>5 ArbiterRouter signals valid at cold start</td><td>arbiter-core/test/signals.test.ts</td><td>All valid domain values</td><td>✅ Pass</td></tr>
-      <tr><td>ArbiterRouter 10-scenario classification (A→B)</td><td>arbiter-core/test/router.test.ts</td><td>10/10</td><td>✅ 10/10</td></tr>
-      <tr><td>50-case routing benchmark (B→C)</td><td>arbiter-core/test/routingBenchmark.test.ts</td><td>≥85% (≥43/50)</td><td>✅ 100% (50/50)</td></tr>
-      <tr><td>ReActLoop 5 task types + ≥99% tool-loop completion</td><td>arbiter-core/test/reactLoop.test.ts</td><td>≥99%</td><td>✅ 100% (25/25)</td></tr>
-      <tr><td>ToolDomainRouter 10→13 tools (all domains correct)</td><td>arbiter-core/test/toolDomainRouter.test.ts</td><td>All correct</td><td>✅ Pass</td></tr>
+      <tr><td>5 SageRouter signals valid at cold start</td><td>core/test/signals.test.ts</td><td>All valid domain values</td><td>✅ Pass</td></tr>
+      <tr><td>SageRouter 10-scenario classification (A→B)</td><td>core/test/router.test.ts</td><td>10/10</td><td>✅ 10/10</td></tr>
+      <tr><td>50-case routing benchmark (B→C)</td><td>core/test/routingBenchmark.test.ts</td><td>≥85% (≥43/50)</td><td>✅ 100% (50/50)</td></tr>
+      <tr><td>ReActLoop 5 task types + ≥99% tool-loop completion</td><td>core/test/reactLoop.test.ts</td><td>≥99%</td><td>✅ 100% (25/25)</td></tr>
+      <tr><td>ToolDomainRouter 10→13 tools (all domains correct)</td><td>core/test/toolDomainRouter.test.ts</td><td>All correct</td><td>✅ Pass</td></tr>
       <tr><td>SSE parser covers all 5 event types + round-trip</td><td>sse-contract/test/parser.test.ts</td><td>All 5 types</td><td>✅ 13/13</td></tr>
       <tr><td>Backend SSE smoke test (live /api/sage/infer)</td><td>backend/test/infer.smoke.test.ts</td><td>Heartbeat→chunk→done</td><td>✅ Pass</td></tr>
       <tr><td>ReActLoop ↔ live backend integration</td><td>backend/test/reactloop.integration.test.ts</td><td>Cloud cycle + allowlist</td><td>✅ Pass</td></tr>
@@ -1080,7 +1080,7 @@ function relevanceScore(record, now):
       <tr><td>Memory retrieval p95 &lt;100ms at 100k</td><td>memory-core/test/memory.test.ts</td><td>&lt;100ms p95</td><td>✅ ~33ms p95</td></tr>
       <tr><td>Session-sim ≥80% local completion</td><td>memory-core/test/memory.test.ts</td><td>≥80%</td><td>✅ 88.2%</td></tr>
       <tr><td>Privacy audit (memory never in logs)</td><td>backend/test/privacy.test.ts</td><td>Zero leakage</td><td>✅ Pass</td></tr>
-      <tr><td>Native-tool benchmark ≥95% (24-task suite)</td><td>arbiter-core/test/nativeTools.test.ts</td><td>≥95%</td><td>✅ 100% (24/24)</td></tr>
+      <tr><td>Native-tool benchmark ≥95% (24-task suite)</td><td>core/test/nativeTools.test.ts</td><td>≥95%</td><td>✅ 100% (24/24)</td></tr>
     </tbody>
   </table>
 

@@ -8,7 +8,7 @@ import { SignalsCache } from './signalsCache';
 /**
  * Adapts the on-device ReActLoop into the voice loop's Responder seam (the
  * point Phase 2 reserved). Replaces the Phase 2 single-shot local responder:
- * now the ArbiterRouter decides local vs cloud per turn, tools run through the
+ * now the SageRouter decides local vs cloud per turn, tools run through the
  * ToolDomainRouter, and tokens stream to TTS as they arrive.
  *
  * The loop (and its warm llama engine) is built once and reused across turns; a

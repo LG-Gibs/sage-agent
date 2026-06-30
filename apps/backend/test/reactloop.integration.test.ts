@@ -1,18 +1,18 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
-import type { ArbiterSignals } from '@sage/shared-types';
+import type { SageSignals } from '@sage/shared-types';
 import {
   ReActLoop,
   ToolDomainRouter,
-  createArbiterRouter,
+  createSageRouter,
   createCloudTarget,
   createScriptedTarget,
   cycle,
   okCloudClient,
   buildCapabilityManifest,
   createMockCapabilityProbe,
-} from '@sage/arbiter-core';
+} from '@sage/core';
 import { createApp } from '../src/server';
 import { loadConfig } from '../src/config';
 
@@ -34,7 +34,7 @@ beforeAll(async () => {
 
 afterAll(() => server?.close());
 
-const CLOUD_SIGNALS: ArbiterSignals = {
+const CLOUD_SIGNALS: SageSignals = {
   network: 'good',
   power: 'normal',
   complexity: 'moderate',
@@ -49,7 +49,7 @@ describe('ReActLoop ↔ SAGE Backend v3 (real cloud target, SSE end-to-end)', ()
     });
 
     const loop = new ReActLoop({
-      arbiter: createArbiterRouter(),
+      router: createSageRouter(),
       capability,
       readSignals: () => CLOUD_SIGNALS,
       targets: {
@@ -78,7 +78,7 @@ describe('ReActLoop ↔ SAGE Backend v3 (real cloud target, SSE end-to-end)', ()
     });
     // Force a model the backend allowlist (Constraint 2) will reject with 403.
     const loop = new ReActLoop({
-      arbiter: createArbiterRouter({ cloud: { efficient: 'evil/model', capable: 'evil/model' } }),
+      router: createSageRouter({ cloud: { efficient: 'evil/model', capable: 'evil/model' } }),
       capability,
       readSignals: () => CLOUD_SIGNALS,
       targets: {

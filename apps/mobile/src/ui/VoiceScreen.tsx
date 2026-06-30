@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { CapabilityManifest } from '@sage/shared-types';
-import type { FeatureFlags } from '@sage/arbiter-core';
+import type { FeatureFlags } from '@sage/core';
 import type { CycleLatency, VoicePipeline, VoiceState } from '@sage/voice-core';
 import { createVoicePipeline } from '../voice/createVoicePipeline';
 import { COLORS, ui } from './theme';

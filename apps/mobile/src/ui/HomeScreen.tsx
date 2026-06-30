@@ -1,12 +1,12 @@
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import type { ArbiterSignals, CapabilityManifest } from '@sage/shared-types';
-import type { FeatureFlags } from '@sage/arbiter-core';
+import type { SageSignals, CapabilityManifest } from '@sage/shared-types';
+import type { FeatureFlags } from '@sage/core';
 import { COLORS, ui } from './theme';
 
 interface Props {
   manifest: CapabilityManifest;
-  signals: ArbiterSignals;
+  signals: SageSignals;
   flags: FeatureFlags;
   onOpenVoice: () => void;
   onRequestMic: () => void;
@@ -58,7 +58,7 @@ export function HomeScreen({ manifest, signals, flags, onOpenVoice, onRequestMic
         <Row k="Verified models" v={String(manifest.installedModels.filter((m) => m.verified).length)} />
       </View>
 
-      <Text style={ui.sectionTitle}>ArbiterRouter Signals</Text>
+      <Text style={ui.sectionTitle}>SageRouter Signals</Text>
       <View style={ui.card}>
         <Row k="Network" v={signals.network} />
         <Row k="Power" v={signals.power} />

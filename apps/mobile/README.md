@@ -25,7 +25,7 @@ New Architecture (Fabric/JSI) is enabled via `app.json`
 
 ## What's in here (Phase 0)
 
-- `App.tsx` — capability-aware boot screen: reads all five ArbiterRouter signals,
+- `App.tsx` — capability-aware boot screen: reads all five SageRouter signals,
   assembles the Capability Manifest, and reports verified hardware data.
 - `modules/sage-capability/` — a local **Expo native module** (Swift + Kotlin)
   probing RAM, OS, GPU backend (Metal/Vulkan), ML accelerator (Core ML/NNAPI),

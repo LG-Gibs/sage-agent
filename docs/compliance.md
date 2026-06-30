@@ -71,7 +71,7 @@ This is the structural guarantee behind "Absolute Data Sovereignty":
   through `POST /api/sage/tools/*`. The **backend holds every upstream
   credential** (`apps/backend/.env`, git-ignored; see `.env.example`).
 - The server's only model authority is an **allowlist check (C2)** — it accepts
-  the model the on-device ArbiterRouter selected and never overrides it
+  the model the on-device SageRouter selected and never overrides it
   (`apps/backend/src/allowlist.ts`).
 
 ```mermaid
@@ -105,10 +105,10 @@ flowchart LR
 Enforcement in repo: `apps/mobile/modules/sage-capability/{ios,android}` implement
 these per-platform; the JS layer consumes a single `NativeCapabilityProbe`.
 
-## 7. Thermal & battery guard → ArbiterRouter Signal 2
+## 7. Thermal & battery guard → SageRouter Signal 2
 
 Sustained inference is monitored. A `critical` thermal reading is folded into the
-Power State signal (`readPower()` returns `critical`), which the ArbiterRouter
+Power State signal (`readPower()` returns `critical`), which the SageRouter
 treats as a **hard local override** (or routes to the efficient local model).
 This is wiring, not a separate component — exactly as specified.
 

@@ -20,7 +20,7 @@ export function getSageCapabilityModule(): SageCapabilityNativeModule | null {
   return cached;
 }
 
-/** Thermal state accessor used by the power signal (ArbiterRouter Signal 2). */
+/** Thermal state accessor used by the power signal (SageRouter Signal 2). */
 export function getThermalState(): 'nominal' | 'fair' | 'serious' | 'critical' {
   const native = getSageCapabilityModule();
   try {

@@ -16,15 +16,15 @@ was built, what is **verified in this environment**, and what is **device-bound*
 | Item | Status | Location |
 |------|--------|----------|
 | Expo Bare scaffold, New Architecture enabled | 📦 | `apps/mobile/app.json` (`newArchEnabled: true`, build-properties), `metro.config.js`, `babel.config.js` |
-| Capability Manifest (RAM, OS, GGUF verify, NPU/GPU) | ✅ core / 📦 native | `packages/arbiter-core/src/capability/*`, `apps/mobile/modules/sage-capability/*` |
-| Five ArbiterRouter signal readers | ✅ logic / 📦 native | `packages/arbiter-core/src/signals/*`, `apps/mobile/src/signals/*` |
+| Capability Manifest (RAM, OS, GGUF verify, NPU/GPU) | ✅ core / 📦 native | `packages/core/src/capability/*`, `apps/mobile/modules/sage-capability/*` |
+| Five SageRouter signal readers | ✅ logic / 📦 native | `packages/core/src/signals/*`, `apps/mobile/src/signals/*` |
 | Local inference binding (first token) | 📦 | `apps/mobile/src/inference/localEngine.ts` (llama.rn) |
 
 ### Success criteria
 | Criterion | Status | Evidence |
 |-----------|--------|----------|
 | App launches & reports verified capability data (iOS + Android) | 📦 | `App.tsx` boot screen renders the manifest; native probes implemented per-platform. Run on device. |
-| All five signals return valid values at cold start | ✅ | `packages/arbiter-core/test/signals.test.ts` — validates the full vector + out-of-domain rejection + resilient fallback. |
+| All five signals return valid values at cold start | ✅ | `packages/core/test/signals.test.ts` — validates the full vector + out-of-domain rejection + resilient fallback. |
 | **Gemma 4 2B produces a first token (iOS + Android)** ⟵ A→B gate | 📦 | `firstTokenProbe()` in `localEngine.ts`. See "On-device validation" below. |
 
 ## Phase 1 — Architecture & Compliance
@@ -86,7 +86,7 @@ complete.
 
 ## Deferred to later phases (per the cadence)
 
-- ArbiterRouter routing engine + 50-case benchmark, ReActLoop, ToolDomainRouter
+- SageRouter routing engine + 50-case benchmark, ReActLoop, ToolDomainRouter
   dispatch (Phase 3 — interfaces already exported).
 - Voice loop: Porcupine/Whisper.cpp/Piper (Phase 2).
 - QuickJS + E2B SandboxManager (Phase 4).

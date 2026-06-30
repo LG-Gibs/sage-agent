@@ -22,7 +22,7 @@ function pickModel(manifest: CapabilityManifest): InstalledModel | null {
 
 /**
  * Compose the native voice engines + the Phase 3 ReActLoop responder into a
- * VoicePipeline. The responder now routes each turn via the ArbiterRouter
+ * VoicePipeline. The responder now routes each turn via the SageRouter
  * (local llama.cpp vs cloud) and runs tools through the ToolDomainRouter.
  * Returns null when no verified model is present (the UI then shows a
  * "voice unavailable" reason from the feature flags).

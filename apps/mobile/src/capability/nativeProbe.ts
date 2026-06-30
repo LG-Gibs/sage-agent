@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import type { NativeCapabilityProbe } from '@sage/arbiter-core';
+import type { NativeCapabilityProbe } from '@sage/core';
 import { getSageCapabilityModule } from '../native/sageCapability';
 
 /**

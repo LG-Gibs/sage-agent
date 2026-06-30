@@ -19,7 +19,7 @@ export interface InstalledModel {
 /**
  * Capability Manifest — verified at startup, determines feature availability.
  * The app may only enter `ready` state once this is assembled AND all five
- * ArbiterRouter signals are readable.
+ * SageRouter signals are readable.
  */
 export interface CapabilityManifest {
   platform: Platform;

@@ -7,7 +7,7 @@ import { createLlamaEngine } from '../inference/localEngine';
  *
  * This is the Phase 2 stand-in that makes the voice loop genuinely end-to-end
  * offline. Phase 3 replaces it with the full ReActLoop (which adds the
- * ArbiterRouter, tool calls and cloud escalation). The engine is loaded lazily
+ * SageRouter, tool calls and cloud escalation). The engine is loaded lazily
  * and kept warm across turns.
  */
 export function createLocalResponder(model: InstalledModel): Responder {

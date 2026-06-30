@@ -1,4 +1,4 @@
-import type { MobileToolHandler } from '@sage/arbiter-core';
+import type { MobileToolHandler } from '@sage/core';
 import type { MobileToolName, ToolCall } from '@sage/shared-types';
 import { SandboxManager } from '@sage/sandbox-core/manager';
 import { toMemoryFragments } from '@sage/memory-core';
