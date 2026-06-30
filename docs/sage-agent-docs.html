@@ -1,0 +1,1175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SAGE-AGENT — Engineering Documentation Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --g:#2FBF77;--g-soft:rgba(47,191,119,.1);--g-line:rgba(47,191,119,.3);
+  --amb:#FFB612;--red:#E5484D;--blue:#5B8DEF;--purple:#9B6DFF;
+  --page:#070809;--bg:#0A0D12;--card:#11151C;--card2:#151A22;--elev:#1C222C;
+  --line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.13);
+  --h:#fff;--t:#EAECEF;--m:#969BA4;--d:#6B7079;--f:#474C54;
+  --display:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --r:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--page);color:var(--t);font-family:var(--body);line-height:1.65;font-size:15px;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5{font-family:var(--display);color:var(--h);font-weight:700;line-height:1.1;letter-spacing:-.02em}
+h1{font-size:clamp(2.2rem,5vw,3.4rem);letter-spacing:-.04em}
+h2{font-size:clamp(1.4rem,3vw,1.9rem);margin:2.4rem 0 .8rem;padding-top:2.4rem;border-top:1px solid var(--line)}
+h3{font-size:1.15rem;margin:1.8rem 0 .5rem}
+h4{font-size:.95rem;margin:1.4rem 0 .35rem;color:var(--m)}
+p{margin:.7rem 0;color:var(--t)}
+a{color:var(--g)}
+code,pre{font-family:var(--mono)}
+code{background:#0C1117;border:1px solid var(--line);border-radius:5px;padding:2px 7px;font-size:.85em;color:#A8C7FA}
+pre{background:#0C1117;border:1px solid var(--line);border-radius:12px;padding:18px;overflow-x:auto;font-size:.82rem;line-height:1.55;margin:1rem 0}
+pre code{background:none;border:none;padding:0;font-size:inherit;color:#cdd6e6}
+hr{border:none;border-top:1px solid var(--line);margin:2rem 0}
+ul,ol{padding-left:1.3rem;margin:.6rem 0}
+li{margin:.28rem 0;color:var(--t)}
+strong{color:var(--h);font-weight:600}
+em{color:var(--m)}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.88rem}
+th{background:var(--card2);color:var(--h);padding:10px 14px;text-align:left;font-family:var(--display);font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;border-bottom:2px solid var(--line2)}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* ── Top nav ── */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,13,18,.9);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);padding:0 max(24px,5%)}
+.topbar-inner{display:flex;align-items:center;gap:0;max-width:1100px;margin:0 auto}
+.wordmark{display:flex;align-items:center;gap:10px;padding:14px 0;font-family:var(--display);font-weight:700;
+  font-size:1rem;color:var(--h);letter-spacing:-.01em;flex:none;margin-right:32px}
+.wordmark svg{flex:none}
+.tabstrip{display:flex;overflow-x:auto;gap:2px;flex:1}
+.tabstrip::-webkit-scrollbar{height:0}
+.dtab{padding:14px 16px;font-family:var(--display);font-size:.88rem;font-weight:600;
+  color:var(--d);cursor:pointer;border:none;background:none;white-space:nowrap;position:relative;
+  transition:color .18s var(--r)}
+.dtab.on{color:var(--h)}
+.dtab.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2.5px;background:var(--g);border-radius:2px 2px 0 0}
+.dtab:hover{color:var(--m)}
+.dtag{margin-left:7px;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;
+  background:var(--g-soft);color:var(--g);border-radius:5px;padding:2px 7px;vertical-align:middle}
+
+/* ── Hero ── */
+.hero{padding:80px max(24px,5%) 60px;background:radial-gradient(120% 80% at 50% -10%,#0d1320,#070809 60%);
+  border-bottom:1px solid var(--line)}
+.hero-inner{max-width:1100px;margin:0 auto}
+.hero .eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--g);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.hero .eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 10px var(--g)}
+.hero h1{max-width:820px;margin-bottom:14px}
+.hero .sub{font-size:1.05rem;color:var(--m);max-width:620px;line-height:1.6}
+.docmeta{display:flex;gap:28px;flex-wrap:wrap;margin-top:24px;font-size:.82rem;color:var(--d);font-family:var(--mono)}
+.docmeta span{display:flex;align-items:center;gap:6px}
+
+/* ── Content wrapper ── */
+.doc{display:none;padding:52px max(24px,5%) 80px}
+.doc.on{display:block}
+.doc-inner{max-width:1100px;margin:0 auto}
+
+/* ── Callout blocks ── */
+.callout{border-radius:12px;padding:18px 22px;margin:1.4rem 0;border-left:3px solid}
+.callout.green{background:var(--g-soft);border-color:var(--g);color:#9FE3C0}
+.callout.amber{background:rgba(255,182,18,.08);border-color:var(--amb);color:#F5D97A}
+.callout.red{background:rgba(229,72,77,.08);border-color:var(--red);color:#F5AAAC}
+.callout.blue{background:rgba(91,141,239,.08);border-color:var(--blue);color:#A8C7FA}
+.callout strong{color:inherit}
+
+/* ── Section blocks ── */
+.section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 32px;margin:1.6rem 0}
+.section h3{margin-top:0;font-size:1.05rem;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+
+/* ── Grid ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:1.4rem 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin:1.4rem 0}
+@media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.card h4{margin-top:0;color:var(--h);font-size:1rem}
+
+/* ── Badge / pill ── */
+.badge{display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;
+  border-radius:6px;padding:3px 9px;font-weight:700;vertical-align:middle;margin:2px 3px}
+.b-green{background:var(--g-soft);color:var(--g)}
+.b-blue{background:rgba(91,141,239,.14);color:var(--blue)}
+.b-amber{background:rgba(255,182,18,.13);color:var(--amb)}
+.b-red{background:rgba(229,72,77,.12);color:var(--red)}
+.b-purple{background:rgba(155,109,255,.14);color:var(--purple)}
+.b-dim{background:rgba(255,255,255,.07);color:var(--m)}
+
+/* ── Metric tiles ── */
+.metrics{display:flex;gap:14px;flex-wrap:wrap;margin:1.4rem 0}
+.metric{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 24px;flex:1 1 160px}
+.metric .v{font-family:var(--display);font-size:2rem;font-weight:700;color:var(--g);line-height:1}
+.metric .k{font-size:.75rem;color:var(--d);margin-top:8px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em}
+
+/* ── Constraint card ── */
+.constraint{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+  border-radius:13px;padding:16px;margin:10px 0}
+.constraint .num{font-family:var(--display);font-size:1.3rem;font-weight:700;color:var(--g);line-height:1;flex:none;width:32px}
+.constraint .body{flex:1}
+.constraint .body strong{color:var(--h);display:block;margin-bottom:3px;font-size:.95rem}
+.constraint .body p{color:var(--m);font-size:.85rem;margin:0}
+
+/* ── Timeline ── */
+.timeline{border-left:2px solid var(--line2);padding-left:24px;margin:1.4rem 0}
+.tl-item{position:relative;margin-bottom:28px}
+.tl-item::before{content:'';position:absolute;left:-30px;top:6px;width:10px;height:10px;border-radius:50%;
+  background:var(--card2);border:2px solid var(--g)}
+.tl-item .tl-head{font-family:var(--display);font-size:.95rem;font-weight:600;color:var(--h);display:flex;align-items:center;gap:10px}
+.tl-item p{color:var(--m);font-size:.87rem;margin:.3rem 0 0}
+
+/* ── API block ── */
+.api-endpoint{background:#0C1117;border:1px solid var(--line2);border-radius:12px;overflow:hidden;margin:1rem 0}
+.api-header{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.method{font-family:var(--mono);font-size:.78rem;font-weight:700;padding:4px 10px;border-radius:6px}
+.m-post{background:rgba(47,191,119,.15);color:var(--g)}
+.m-get{background:rgba(91,141,239,.15);color:var(--blue)}
+.api-path{font-family:var(--mono);font-size:.88rem;color:var(--h)}
+.api-body{padding:14px 18px}
+
+/* ── Type block ── */
+.type-block{background:#0C1117;border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:.8rem 0;font-family:var(--mono);font-size:.8rem;line-height:1.6}
+
+/* ── Persona card ── */
+.persona{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:10px 0}
+.persona-av{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.persona-body .name{font-weight:700;color:var(--h);font-size:.95rem}
+.persona-body .role{font-size:.8rem;color:var(--m)}
+.persona-body .need{font-size:.85rem;color:var(--t);margin-top:5px;line-height:1.45}
+
+/* ── Phase row ── */
+.phase-row{display:flex;gap:14px;align-items:flex-start;padding:14px;border-bottom:1px solid var(--line)}
+.phase-row:last-child{border-bottom:none}
+.phase-num{font-family:var(--display);font-size:1.4rem;font-weight:700;color:var(--g);flex:none;width:40px}
+.phase-body .pt{font-weight:700;color:var(--h);font-size:.95rem}
+.phase-body .ps{font-size:.83rem;color:var(--m);margin-top:3px}
+
+/* ── Gate table ── */
+.gate{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card2);border-radius:10px;margin:7px 0}
+.gate .gi{font-family:var(--mono);font-size:.85rem;color:var(--h);flex:1}
+.gate .gv{font-family:var(--display);font-weight:700;font-size:.95rem;color:var(--g)}
+.gate .gk{font-size:.75rem;color:var(--d);font-family:var(--mono);margin-left:4px}
+
+/* ── Scroll marker ── */
+.doc-section{scroll-margin-top:72px}
+
+/* ── Print / TOC ── */
+.toc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 28px;margin:1.6rem 0}
+.toc h4{font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;color:var(--d);font-family:var(--mono);margin-bottom:12px}
+.toc ol{padding-left:1.2rem}
+.toc li{font-size:.88rem;margin:.3rem 0}
+.toc a{color:var(--m);text-decoration:none}
+.toc a:hover{color:var(--g)}
+
+/* ── Footer ── */
+.pagefooter{border-top:1px solid var(--line);padding:32px max(24px,5%);text-align:center;color:var(--d);font-size:.82rem;font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP NAV ===== -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="wordmark">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="46" fill="#0A0D12" stroke="#2FBF77" stroke-width="3"/>
+        <path d="M50 22 C50 22 30 38 30 55 C30 67 38 76 50 76 C62 76 70 67 70 55 C70 38 50 22 50 22Z" fill="#2FBF77" opacity=".9"/>
+        <circle cx="50" cy="55" r="12" fill="#0A0D12"/>
+        <circle cx="50" cy="55" r="6" fill="#2FBF77"/>
+      </svg>
+      SAGE-AGENT
+    </div>
+    <div class="tabstrip" role="tablist">
+      <button class="dtab on" data-doc="brd" role="tab">BRD<span class="dtag">Business</span></button>
+      <button class="dtab" data-doc="prd" role="tab">PRD<span class="dtag">Product</span></button>
+      <button class="dtab" data-doc="sdd" role="tab">SDD<span class="dtag">Design</span></button>
+      <button class="dtab" data-doc="tsd" role="tab">TSD<span class="dtag">Technical</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Engineering Documentation Suite</div>
+    <h1>SAGE-AGENT</h1>
+    <p class="sub">A privacy-first, offline-first mobile AI companion. The device is the agent; the backend extends its reach.</p>
+    <div class="docmeta">
+      <span>📅 Version 0.1.0</span>
+      <span>📦 LG-Gibs/sage-agent</span>
+      <span>🏗 Phases 0–6 Complete</span>
+      <span>✅ 117 tests · tsc-b clean</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+  BRD — BUSINESS REQUIREMENT DOCUMENT
+================================================================ -->
+<div class="doc on" id="doc-brd">
+<div class="doc-inner">
+
+  <div class="toc">
+    <h4>Contents</h4>
+    <ol>
+      <li><a href="#brd-1">Executive Summary</a></li>
+      <li><a href="#brd-2">Problem Statement</a></li>
+      <li><a href="#brd-3">Business Vision & Goals</a></li>
+      <li><a href="#brd-4">Stakeholders</a></li>
+      <li><a href="#brd-5">Scope</a></li>
+      <li><a href="#brd-6">Business Rules</a></li>
+      <li><a href="#brd-7">Risks & Assumptions</a></li>
+      <li><a href="#brd-8">Success Metrics & KPIs</a></li>
+    </ol>
+  </div>
+
+  <h2 id="brd-1" class="doc-section">1. Executive Summary</h2>
+  <div class="callout green">
+    <strong>Prime Directive:</strong> The core experience — voice interaction, memory retrieval, simple task execution, and basic code running — must function entirely on-device with no network connection. Cloud services extend capability; they are never required for the app to be useful.
+  </div>
+  <p>SAGE-AGENT is a production-grade, privacy-first mobile AI companion built for iOS and Android. It combines Siri-grade OS integration, Replit-grade code execution, and Perplexity-grade synthesis — with a hard architectural guarantee: the device is the agent, not a thin terminal to a cloud.</p>
+  <p>The project resolves a fundamental tension in modern AI: to get a highly personalized assistant, users currently must stream their entire life to a megacorporation's servers. SAGE-AGENT breaks this Faustian bargain by placing the full intelligence stack on-device, using cloud resources strictly as a stateless, key-isolated proxy for tasks that genuinely exceed local capability.</p>
+
+  <h2 id="brd-2" class="doc-section">2. Problem Statement</h2>
+
+  <h3>2.1 The Cloud Dependency Crisis</h3>
+  <p>Current AI assistants are architecturally glass screens rendering cloud intelligence. This creates four compounding business problems:</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>📡 Connectivity Dependency</h4>
+      <p>Every powerful AI tool becomes a paperweight during outages, flights, remote work, or poor cellular coverage. Users cannot trust AI for critical tasks.</p>
+    </div>
+    <div class="card">
+      <h4>🔐 Surveillance Tradeoff</h4>
+      <p>Personalization requires streaming private data to centralized servers — contacts, calendar, voice, location. The user has no cryptographic guarantee their digital twin is not being mined or sold.</p>
+    </div>
+    <div class="card">
+      <h4>💸 Marginal Cost Spiral</h4>
+      <p>Cloud inference at scale is expensive. Every token of every user's every query is billed to the operator, making sustained, high-frequency personal AI economically unsustainable.</p>
+    </div>
+    <div class="card">
+      <h4>🧩 App Silo Lock-in</h4>
+      <p>Users manage intent across dozens of apps. There is no unified intelligent layer that understands context across calendars, files, contacts, and tasks without siloing that context in a vendor's cloud.</p>
+    </div>
+  </div>
+
+  <h3>2.2 Market Opportunity</h3>
+  <p>Modern smartphones ship with 8–16GB RAM, dedicated Neural Processing Units, and GPU acceleration (Metal on iOS, Vulkan on Android). The hardware has outpaced the software paradigm. A 2B-parameter GGUF model runs in under 2GB of RAM at 30+ tokens/second on an iPhone 15 Pro — yet no production assistant exploits this.</p>
+
+  <h2 id="brd-3" class="doc-section">3. Business Vision & Goals</h2>
+
+  <h3>3.1 Vision: The Airplane Mode Singularity</h3>
+  <p>The ultimate business achievement is the moment a user at 30,000 feet, completely disconnected, can ask their device to:</p>
+  <ul>
+    <li>Search through a year of local meeting notes via on-device semantic retrieval</li>
+    <li>Write and execute a JavaScript script to parse a downloaded CSV file</li>
+    <li>Generate a functioning HTML UI for a new project and render it on-screen</li>
+  </ul>
+  <p>This is the <strong>Airplane Mode Singularity</strong> — the proof that continuous, high-level cognition does not require a tether to a server farm.</p>
+
+  <h3>3.2 Strategic Business Goals</h3>
+  <div class="grid2">
+    <div class="section">
+      <h3>Goal 1 — Absolute Data Sovereignty</h3>
+      <p>All memory retrieval, routing decisions, and OS integrations execute locally. The backend is a stateless proxy; it never stores, searches, ranks, or embeds user memory. Users have a cryptographic guarantee that their digital twin cannot be mined, sold, or breached from a centralized database.</p>
+    </div>
+    <div class="section">
+      <h3>Goal 2 — The Death of the App Paradigm</h3>
+      <p>SAGE-AGENT replaces the app store model with intent-driven dynamic software. Instead of downloading a mortgage calculator, users ask SAGE to write, run, and save one. The user becomes a commander of ephemeral software rather than a consumer of pre-packaged apps.</p>
+    </div>
+    <div class="section">
+      <h3>Goal 3 — Democratized Thick-Client AI</h3>
+      <p>Prove that a $500 smartphone is capable of hosting a sovereign software factory and research lab. By running frontier-quality intelligence locally and escalating only the most complex edge cases to cloud, the marginal cost of intelligence approaches zero.</p>
+    </div>
+    <div class="section">
+      <h3>Goal 4 — Return Ownership to the User</h3>
+      <p>Transform the smartphone from a terminal that connects you to an AI into the AI itself. The device does not borrow intelligence from a server — it hosts it.</p>
+    </div>
+  </div>
+
+  <h2 id="brd-4" class="doc-section">4. Stakeholders</h2>
+  <table>
+    <thead><tr><th>Stakeholder</th><th>Role</th><th>Interest / Concern</th><th>Influence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Product Owner (LG-Gibs)</strong></td><td>Vision & roadmap</td><td>Architectural integrity, phase delivery, IP protection</td><td>High</td></tr>
+      <tr><td><strong>Lead Developer</strong></td><td>Implementation</td><td>Constitutional constraints respected, testability, governance gates</td><td>High</td></tr>
+      <tr><td><strong>End Users (Privacy-Conscious Professionals)</strong></td><td>Primary users</td><td>Data stays on-device, works offline, fast voice loop, trusted memory</td><td>High</td></tr>
+      <tr><td><strong>Enterprise Clients</strong></td><td>B2B deployment</td><td>POPIA/GDPR compliance, no data egress, audit logs, on-prem backend option</td><td>Medium</td></tr>
+      <tr><td><strong>Apple App Store Review</strong></td><td>Distribution gatekeeper</td><td>Guideline 2.5.2 (sandboxed code execution), privacy permission declarations</td><td>High</td></tr>
+      <tr><td><strong>Google Play Review</strong></td><td>Distribution gatekeeper</td><td>SAF file access, CalendarContract permissions, background service limits</td><td>High</td></tr>
+      <tr><td><strong>Upstream Providers (OpenRouter / Azure / Tavily / E2B)</strong></td><td>Cloud capability partners</td><td>API key isolation (keys never on device), fair use</td><td>Medium</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="brd-5" class="doc-section">5. Scope</h2>
+
+  <h3>5.1 In Scope</h3>
+  <ul>
+    <li>iOS and Android mobile application (Expo Bare, New Architecture)</li>
+    <li>Always-on wake word ("Hey Sage") + on-device STT + on-device TTS voice loop</li>
+    <li>Local GGUF inference (Gemma 4 2B/9B via llama.cpp)</li>
+    <li>Hybrid code sandbox: QuickJS (mobile, App Store compliant) + E2B Firecracker (cloud)</li>
+    <li>On-device semantic memory (sqlite-vec HNSW) with lifecycle management</li>
+    <li>Deep OS integrations: Contacts, Calendar, Reminders, sandboxed File System</li>
+    <li>SAGE Backend v3 — a stateless cloud inference proxy (no server-side loops or memory)</li>
+    <li>Adaptive cloud routing via an on-device ArbiterRouter evaluating 5 real-time signals</li>
+    <li>Graceful degradation hierarchy from capable-cloud to on-device to error surface</li>
+  </ul>
+
+  <h3>5.2 Out of Scope (v0.1)</h3>
+  <ul>
+    <li>Desktop or web application</li>
+    <li>Server-side LLM fine-tuning or training</li>
+    <li>Multi-device memory synchronization (by design — Constraint 5)</li>
+    <li>Social / sharing features</li>
+    <li>Payments or billing infrastructure</li>
+    <li>Third-party app plugins beyond the OS-native integrations</li>
+  </ul>
+
+  <h2 id="brd-6" class="doc-section">6. Business Rules (Constitutional Constraints)</h2>
+  <p>These are binding business rules that cannot be overridden by any implementation decision. Violations constitute a product defect, not a trade-off.</p>
+
+  <div class="constraint"><div class="num">C1</div><div class="body"><strong>Device Owns the Intelligence Loop</strong><p>The mobile device drives all reasoning and tool orchestration. The cloud server executes exactly one inference cycle per request and returns. No server-side planning, looping, or state between calls. Business reason: prevents cloud lock-in and preserves offline capability.</p></div></div>
+  <div class="constraint"><div class="num">C2</div><div class="body"><strong>Routing Decisions Are Never Made Server-Side</strong><p>The on-device ArbiterRouter selects model and target (local vs cloud). The server applies an allowlist check only — it never overrides the device's routing decision. Business reason: routing decisions expose user context; they must not leave the device.</p></div></div>
+  <div class="constraint"><div class="num">C3</div><div class="body"><strong>The Backend Is a Stateless Proxy</strong><p>POST /api/sage/infer validates, forwards to the upstream, streams back, and returns. No state persists between calls. Business reason: a stateless backend cannot be subpoenaed for user conversation history.</p></div></div>
+  <div class="constraint"><div class="num">C4</div><div class="body"><strong>Two-Domain Tool Registry Is Authoritative</strong><p>Every tool is categorized as either mobile (on-device, offline) or cloud (requires connectivity). A mobile tool never executes on the server; a cloud tool never executes without connectivity. Business reason: prevents accidental data exfiltration via tool arguments.</p></div></div>
+  <div class="constraint"><div class="num">C5</div><div class="body"><strong>Memory Is On-Device and Never Synced</strong><p>The sqlite-vec memory store is local-only. The backend receives memories as opaque prompt text and never stores, searches, ranks, or embeds them. Deletion is real — no shadow copy. Business reason: this is the foundation of the data sovereignty promise.</p></div></div>
+  <div class="constraint"><div class="num">C6</div><div class="body"><strong>No Features on Deprecated Paths</strong><p>The legacy /api/sage/agent endpoint, the vm sandbox, and native tool mocks are in maintenance mode only. No new capabilities are built against them. Business reason: prevents architectural debt from undermining the clean v3 contract.</p></div></div>
+
+  <h2 id="brd-7" class="doc-section">7. Risks & Assumptions</h2>
+  <table>
+    <thead><tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr><td>Apple App Store rejection for QuickJS code execution</td><td>Low</td><td>Critical</td><td>Strict sandboxing (isolated context, no native bridge); no dynamically-downloaded code modifies core app functionality. Documented 2.5.2 compliance strategy.</td></tr>
+      <tr><td>GGUF model weights too large for App Store binary size limits</td><td>Medium</td><td>High</td><td>Models are downloaded at first launch from a separate CDN, not bundled in the IPA/APK.</td></tr>
+      <tr><td>llama.cpp GGUF API changes breaking the mobile binding</td><td>Medium</td><td>Medium</td><td>The llama.rn / llama.cpp binding is behind the LocalGenerate interface; swapping the engine doesn't touch the pipeline.</td></tr>
+      <tr><td>Upstream provider rate limits / price changes</td><td>High</td><td>Low-Medium</td><td>The ArbiterRouter defaults to local inference for most tasks. Cloud is optional, not required.</td></tr>
+      <tr><td>Thermal throttling on lower-end devices degrading voice latency</td><td>Medium</td><td>Medium</td><td>Thermal state feeds ArbiterRouter Signal 2 (Power State); the router routes to the efficient model or cloud under thermal pressure.</td></tr>
+      <tr><td>sqlite-vec HNSW index corruption on app crash</td><td>Low</td><td>Medium</td><td>SQLCipher with WAL mode; memory store rebuilds from text if the index is corrupted (text is the source of truth).</td></tr>
+    </tbody>
+  </table>
+  <div class="callout amber"><strong>Key Assumptions:</strong> Target devices have ≥4GB RAM (2B model minimum) and iOS 15.1+ / Android 8.1+ (API 26+). The user consents to microphone permission for voice features. Upstream API keys are provisioned and available in the backend environment.</div>
+
+  <h2 id="brd-8" class="doc-section">8. Success Metrics & KPIs</h2>
+  <p>These KPIs directly correspond to the Phase governance gates verified during development:</p>
+  <div class="metrics">
+    <div class="metric"><div class="v">&lt;500ms</div><div class="k">Voice I/O latency (STT compute + TTS start)</div></div>
+    <div class="metric"><div class="v">&lt;100ms</div><div class="k">Top-5 memory retrieval @ 100k vectors</div></div>
+    <div class="metric"><div class="v">≥80%</div><div class="k">Session tasks completed without cloud escalation</div></div>
+    <div class="metric"><div class="v">≥85%</div><div class="k">ArbiterRouter agreement with expert routing benchmark (50 cases)</div></div>
+    <div class="metric"><div class="v">≥99%</div><div class="k">QuickJS execution benchmark pass rate</div></div>
+    <div class="metric"><div class="v">≥95%</div><div class="k">Native OS tool task completion rate</div></div>
+  </div>
+  <div class="gate"><span class="gi">Routing benchmark (actual)</span><span class="gv">100%</span><span class="gk">50/50 cases</span></div>
+  <div class="gate"><span class="gi">QuickJS benchmark (actual)</span><span class="gv">100%</span><span class="gk">38/38 cases</span></div>
+  <div class="gate"><span class="gi">Retrieval latency p95 (actual)</span><span class="gv">~33ms</span><span class="gk">brute-force reference; device HNSW faster</span></div>
+  <div class="gate"><span class="gi">Session local completion (actual)</span><span class="gv">88.2%</span><span class="gk">15/17 tasks</span></div>
+  <div class="gate"><span class="gi">Native-tool benchmark (actual)</span><span class="gv">100%</span><span class="gk">24/24 tasks incl. PERMISSION_DENIED</span></div>
+
+</div>
+</div>
+
+<!-- ================================================================
+  PRD — PRODUCT REQUIREMENT DOCUMENT
+================================================================ -->
+<div class="doc" id="doc-prd">
+<div class="doc-inner">
+
+  <div class="toc">
+    <h4>Contents</h4>
+    <ol>
+      <li><a href="#prd-1">Product Overview & Pillars</a></li>
+      <li><a href="#prd-2">User Personas</a></li>
+      <li><a href="#prd-3">User Stories</a></li>
+      <li><a href="#prd-4">Functional Requirements</a></li>
+      <li><a href="#prd-5">Non-Functional Requirements</a></li>
+      <li><a href="#prd-6">Acceptance Criteria</a></li>
+      <li><a href="#prd-7">Dependencies & Milestones</a></li>
+    </ol>
+  </div>
+
+  <h2 id="prd-1" class="doc-section">1. Product Overview & The Four Pillars</h2>
+  <p>SAGE-AGENT is a mobile AI companion structured around four mutually reinforcing pillars. Each pillar has a defined offline path before any online path (the Prime Directive).</p>
+
+  <div class="grid2">
+    <div class="section">
+      <h3>Pillar A — Voice & OS Interface</h3>
+      <p><strong>Offline:</strong> Wake word (Porcupine), STT (Whisper.cpp), TTS (Piper) all run locally via llama.rn. Deep OS access (Contacts, Calendar, Reminders, Files) available offline via native bridges.</p>
+      <p><strong>Online:</strong> Same pipeline; routing can escalate to cloud model for complex responses.</p>
+      <p><em>Target:</em> &lt;500ms end-to-end voice I/O latency.</p>
+    </div>
+    <div class="section">
+      <h3>Pillar B — Hybrid Code Sandbox</h3>
+      <p><strong>Offline:</strong> QuickJS isolated context for JS/TS execution and data manipulation. Sandboxed WebView for HTML/JS prototype rendering. Both comply with App Store Guideline 2.5.2.</p>
+      <p><strong>Online:</strong> E2B Firecracker microVM for Python and heavy compute (cloud domain tool; ToolDomainRouter returns OFFLINE envelope when disconnected).</p>
+    </div>
+    <div class="section">
+      <h3>Pillar C — Adaptive Search & Synthesis</h3>
+      <p><strong>Offline:</strong> sqlite-vec semantic search over user's personal notes and device history. Must return top-5 results in &lt;100ms at 100k vectors.</p>
+      <p><strong>Online:</strong> Tavily web search + Jina Reader page fetch, orchestrated by the mobile ReActLoop using cloud domain tools.</p>
+    </div>
+    <div class="section">
+      <h3>Pillar D — Arbiter Core</h3>
+      <p>The on-device orchestration brain. Three independently testable components:</p>
+      <ul>
+        <li><strong>ArbiterRouter</strong> — evaluates 5 signals, selects model/target</li>
+        <li><strong>ReActLoop</strong> — drives all reasoning and tool orchestration</li>
+        <li><strong>ToolDomainRouter</strong> — two-domain dispatch for all 13 tools</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 id="prd-2" class="doc-section">2. User Personas</h2>
+  <div class="persona"><div class="persona-av" style="background:#3a2a14">🎨</div><div class="persona-body"><div class="name">Zara Mthembu, 31</div><div class="role">Creative Director · The Brave Collective · Johannesburg</div><div class="need">Needs to draft briefs, manage feedback loops, and coordinate shoots — often while commuting or on-set without reliable LTE. Privacy is critical; client work cannot leave her device. She speaks to Sage while driving to let it draft follow-up emails.</div></div></div>
+  <div class="persona"><div class="persona-av" style="background:#1a3030">💻</div><div class="persona-body"><div class="name">Thabo Nkosi, 27</div><div class="role">Senior Engineer · Yoco · Cape Town</div><div class="need">Needs to run quick data transformations, search through past meeting notes, and look up colleagues' contact details without copy-pasting to ChatGPT. Values isolation — source code never leaves his environment. Uses execute_js for quick ad-hoc computations.</div></div></div>
+  <div class="persona"><div class="persona-av" style="background:#1a1e30">🏥</div><div class="persona-body"><div class="name">Dr. Priya Naidoo, 42</div><div class="role">General Practitioner · Life Vincent Pallotti Hospital · Durban</div><div class="need">Needs to set reminders, query her calendar, and draft letters between consultations. Highly sensitive privacy context (patient-adjacent). She uses Sage in private mode — all routing must stay local. Offline resilience is non-negotiable in rural clinic rotations.</div></div></div>
+  <div class="persona"><div class="persona-av" style="background:#301814">🚀</div><div class="persona-body"><div class="name">Naledi Kgosi, 34</div><div class="role">Founder · Kgosi Ventures · Pretoria</div><div class="need">Needs competitive research, slide drafts, and market synthesis — often on the move between investor meetings. Wants cloud escalation for complex tasks but values speed for quick questions. Heavy memory user: Sage should remember investor preferences across conversations.</div></div></div>
+  <div class="persona"><div class="persona-av" style="background:#1e1a30">📚</div><div class="persona-body"><div class="name">Simon van der Berg, 55</div><div class="role">Senior Lecturer · Stellenbosch University</div><div class="need">Needs deep research synthesis, bibliography-building, and the ability to run analysis scripts against CSV datasets. Works on campus (good WiFi) but travels to conferences. Wants Sage to remember research topics and surface relevant past notes.</div></div></div>
+
+  <h2 id="prd-3" class="doc-section">3. User Stories</h2>
+  <h3>Voice & OS</h3>
+  <ul>
+    <li>As Zara, I want to say "Hey Sage, draft a follow-up to yesterday's client brief" while driving, so I don't need to touch my phone.</li>
+    <li>As Dr. Naidoo, I want all interactions to stay fully on-device when I'm in a sensitive clinical context, so patient-adjacent conversations never reach the cloud.</li>
+    <li>As Thabo, I want to ask Sage to create a calendar event for tomorrow at 9am with no typing, so I can focus on my work.</li>
+  </ul>
+  <h3>Code Sandbox</h3>
+  <ul>
+    <li>As Thabo, I want to execute a JavaScript function against a JSON payload inline in the conversation, so I get the result in seconds without opening an IDE.</li>
+    <li>As Simon, I want to run a Python script that counts word frequencies in a text file, so I get results without leaving the app.</li>
+    <li>As Naledi, I want Sage to generate an HTML prototype for a new landing page concept and show it to me instantly, so I can iterate quickly.</li>
+  </ul>
+  <h3>Search & Memory</h3>
+  <ul>
+    <li>As Thabo, I want Sage to recall that my manager is Maya and she prefers concise email updates without me having to re-state it every session.</li>
+    <li>As Simon, I want to search my past research notes semantically so I can find the source I read three months ago about on-device LLMs.</li>
+    <li>As Naledi, I want Sage to fetch the latest funding news for a competitor and synthesize it into a one-paragraph brief.</li>
+  </ul>
+  <h3>OS Integrations</h3>
+  <ul>
+    <li>As Zara, I want to ask Sage to look up a client's phone number from my contacts without leaving the conversation.</li>
+    <li>As Dr. Naidoo, I want to set a reminder for a medication review in two days, by voice, without unlocking my phone.</li>
+    <li>As Simon, I want to ask Sage to list the files in my research folder and read the abstract from a saved PDF.</li>
+  </ul>
+
+  <h2 id="prd-4" class="doc-section">4. Functional Requirements</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Requirement</th><th>Priority</th><th>Phase</th></tr></thead>
+    <tbody>
+      <tr><td>FR-01</td><td>Wake word detection ("Hey Sage") using Picovoice Porcupine; ultra-low-power, offline</td><td>Must</td><td>2</td></tr>
+      <tr><td>FR-02</td><td>On-device speech-to-text via Whisper.cpp; functions entirely offline</td><td>Must</td><td>2</td></tr>
+      <tr><td>FR-03</td><td>On-device text-to-speech via Piper VITS ONNX; functions entirely offline</td><td>Must</td><td>2</td></tr>
+      <tr><td>FR-04</td><td>Push-to-talk as fallback when wake word is unavailable</td><td>Must</td><td>2</td></tr>
+      <tr><td>FR-05</td><td>Barge-in: new push-to-talk cancels and replaces an active speaking turn</td><td>Must</td><td>2</td></tr>
+      <tr><td>FR-06</td><td>ArbiterRouter evaluates 5 signals (network, power, complexity, privacy, preference) on-device before every inference cycle</td><td>Must</td><td>3</td></tr>
+      <tr><td>FR-07</td><td>Hard routing overrides: offline, critical battery, sensitive privacy, prefer_local → always local, no exceptions</td><td>Must</td><td>3</td></tr>
+      <tr><td>FR-08</td><td>Graceful degradation hierarchy: capable-cloud → efficient-cloud → local-default → local-efficient → error surface</td><td>Must</td><td>3</td></tr>
+      <tr><td>FR-09</td><td>Local JS execution in an isolated QuickJS context (no host globals, enforced memory/time limits)</td><td>Must</td><td>4</td></tr>
+      <tr><td>FR-10</td><td>Sandboxed HTML/JS/CSS prototype rendering in a locked-down WebView</td><td>Must</td><td>4</td></tr>
+      <tr><td>FR-11</td><td>Python execution via E2B Firecracker microVM (cloud domain); returns OFFLINE envelope when disconnected</td><td>Must</td><td>4</td></tr>
+      <tr><td>FR-12</td><td>On-device semantic memory: create, recall (top-k), TTL expiry, capacity pruning</td><td>Must</td><td>5</td></tr>
+      <tr><td>FR-13</td><td>Memory injected into cloud inference requests as opaque fragments (memories[]); backend never stores them</td><td>Must</td><td>5</td></tr>
+      <tr><td>FR-14</td><td>Online deep research via Tavily search + Jina Reader page fetch + synthesis</td><td>Should</td><td>5</td></tr>
+      <tr><td>FR-15</td><td>Native Contacts read/search (EventKit / ContactsContract); PERMISSION_DENIED handled gracefully</td><td>Must</td><td>6</td></tr>
+      <tr><td>FR-16</td><td>Native Calendar create + query events (EventKit / CalendarContract)</td><td>Must</td><td>6</td></tr>
+      <tr><td>FR-17</td><td>Native Reminders create + list (EventKit / local Android store)</td><td>Must</td><td>6</td></tr>
+      <tr><td>FR-18</td><td>Sandboxed file system: read, write, list within app document scope (Files.app / SAF)</td><td>Must</td><td>6</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="prd-5" class="doc-section">5. Non-Functional Requirements</h2>
+  <table>
+    <thead><tr><th>Category</th><th>Requirement</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Latency</strong></td><td>Voice I/O (STT compute + TTS start)</td><td>&lt;500ms on-device</td></tr>
+      <tr><td><strong>Latency</strong></td><td>Memory top-5 retrieval at 100k vectors</td><td>&lt;100ms on-device (sqlite-vec HNSW)</td></tr>
+      <tr><td><strong>Latency</strong></td><td>First token from local GGUF (Gemma 4 2B)</td><td>To be benchmarked on target hardware</td></tr>
+      <tr><td><strong>Offline</strong></td><td>Core experience (voice, memory, simple tasks, code execution) without any network</td><td>100% offline-capable</td></tr>
+      <tr><td><strong>Privacy</strong></td><td>Memory content never in server logs; only counts</td><td>Zero leakage (verified by privacy audit test)</td></tr>
+      <tr><td><strong>Privacy</strong></td><td>Upstream API keys never on device</td><td>Enforced at architecture level (server proxy only)</td></tr>
+      <tr><td><strong>Security</strong></td><td>All local user data encrypted at rest</td><td>SQLCipher (AES-256) for WatermelonDB + sqlite-vec; MMKV encrypted key store</td></tr>
+      <tr><td><strong>Security</strong></td><td>Encryption keys in hardware-backed storage</td><td>iOS Keychain / Android Keystore (never in JS-readable storage)</td></tr>
+      <tr><td><strong>Compliance</strong></td><td>App Store Guideline 2.5.2 (sandboxed code execution)</td><td>QuickJS isolated context; no native bridge; no dynamically-downloaded app code</td></tr>
+      <tr><td><strong>Reliability</strong></td><td>ReActLoop tool-loop completion rate</td><td>≥99% across all task types</td></tr>
+      <tr><td><strong>Performance</strong></td><td>Minimum supported device</td><td>4GB RAM (2B model); iOS 15.1 / Android 8.1 (API 26)</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="prd-6" class="doc-section">6. Acceptance Criteria (Phase Governance Gates)</h2>
+  <div class="callout blue">Acceptance criteria correspond directly to the phase governance gates that must pass before a phase transition is approved. These are the contractual "definition of done" for each feature area.</div>
+  <table>
+    <thead><tr><th>Feature Area</th><th>Gate</th><th>Threshold</th><th>Actual Result</th></tr></thead>
+    <tbody>
+      <tr><td>Capability Detection</td><td>All 5 ArbiterRouter signals return valid values at cold start</td><td>100% valid domain values</td><td>✅ Verified (unit tests)</td></tr>
+      <tr><td>Routing Intelligence</td><td>ArbiterRouter classifies 10 distinct signal-combination scenarios</td><td>All 10 correct (A→B gate)</td><td>✅ 10/10</td></tr>
+      <tr><td>Routing Intelligence</td><td>50-case expert routing benchmark</td><td>≥85% agreement (B→C gate)</td><td>✅ 100% (50/50)</td></tr>
+      <tr><td>Agent Loop</td><td>ReActLoop completes 5 multi-tool task types without error</td><td>All 5 complete</td><td>✅ Verified</td></tr>
+      <tr><td>Agent Loop</td><td>Tool-loop completion rate across integration test suite</td><td>≥99%</td><td>✅ 100% (25/25)</td></tr>
+      <tr><td>Code Sandbox</td><td>QuickJS benchmark suite pass rate</td><td>≥99%</td><td>✅ 100% (38/38)</td></tr>
+      <tr><td>Code Sandbox</td><td>QuickJS isolation: no host globals, interrupt on timeout, OOM containment</td><td>All three proven</td><td>✅ Verified</td></tr>
+      <tr><td>Memory</td><td>sqlite-vec retrieval latency top-5 at 100k vectors</td><td>&lt;100ms p95</td><td>✅ ~33ms p95 (reference; device HNSW faster)</td></tr>
+      <tr><td>Memory</td><td>Session tasks completed without cloud escalation</td><td>≥80%</td><td>✅ 88.2%</td></tr>
+      <tr><td>Memory</td><td>Memory content absent from server logs (privacy audit)</td><td>Zero leakage</td><td>✅ Verified by spy test</td></tr>
+      <tr><td>Native OS Tools</td><td>Benchmark across 6 native tools (incl. PERMISSION_DENIED per tool)</td><td>≥95% completion</td><td>✅ 100% (24/24)</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="prd-7" class="doc-section">7. Dependencies & Milestones</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-head">Phase 0 — Environment & Capability Detection <span class="badge b-green">Complete</span></div><p>Expo Bare scaffold (New Architecture), native Capability Manifest (Swift/Kotlin), 5-signal ArbiterRouter readers, Gemma 4 2B first token on device.</p></div>
+    <div class="tl-item"><div class="tl-head">Phase 1 — Architecture & Compliance <span class="badge b-green">Complete</span></div><p>Full Mermaid system architecture. App Store 2.5.2 strategy. SQLCipher + Keychain/Keystore design. No-upstream-key-on-device confirmation.</p></div>
+    <div class="tl-item"><div class="tl-head">Phase 2 — Native Shell & Voice Loop <span class="badge b-green">Complete</span></div><p>Full audio pipeline: Porcupine → Whisper.cpp → model → Piper. Barge-in, graceful degradation, latency tracking. Capability-gated Home + Voice UI screens.</p></div>
+    <div class="tl-item"><div class="tl-head">Phase 3 — Arbiter Core <span class="badge b-green">Complete</span></div><p>ArbiterRouter (5-signal, hard overrides, soft guidance, cloud tiers). ReActLoop (local + cloud targets, graceful degradation hierarchy). ToolDomainRouter (13 tools, authoritative two-domain dispatch). Live backend integration test.</p></div>
+    <div class="tl-item"><div class="tl-head">Phase 4 — Code Sandbox <span class="badge b-green">Complete</span></div><p>QuickJS WASM sandbox (isolation proven, 38/38 benchmark). SandboxManager (local + E2B paths). execute_js, render_prototype, execute_python handlers wired.</p></div>
+    <div class="tl-item"><div class="tl-head">Phase 5 — Search & Memory <span class="badge b-green">Complete</span></div><p>sqlite-vec offline RAG pipeline (offline embedder, lifecycle, injection). Tavily + Jina online research. search_local_memory handler. Privacy audit passing.</p></div>
+    <div class="tl-item"><div class="tl-head">Phase 6 — Deep OS Integrations <span class="badge b-green">Complete</span></div><p>SageOs native module (Swift + Kotlin): Contacts, Calendar, Reminders, sandboxed Files. PERMISSION_DENIED graceful handling. 100% native-tool benchmark.</p></div>
+  </div>
+
+  <h3>External Dependencies</h3>
+  <table>
+    <thead><tr><th>Dependency</th><th>Type</th><th>Purpose</th><th>Fallback if unavailable</th></tr></thead>
+    <tbody>
+      <tr><td>Picovoice Porcupine</td><td>SDK + Access Key</td><td>Always-on wake word</td><td>Push-to-talk mode (app still works)</td></tr>
+      <tr><td>llama.rn (llama.cpp)</td><td>Native library</td><td>On-device GGUF inference</td><td>Cloud-only mode via ArbiterRouter</td></tr>
+      <tr><td>whisper.rn</td><td>Native library</td><td>On-device STT</td><td>Web Speech API (degraded, online only)</td></tr>
+      <tr><td>ONNX Runtime</td><td>Native library</td><td>Piper TTS voice synthesis</td><td>Text-only responses (TTS disabled)</td></tr>
+      <tr><td>OpenRouter / Azure AI Foundry</td><td>Cloud API</td><td>Frontier model inference</td><td>Local model only (offline mode)</td></tr>
+      <tr><td>Tavily API</td><td>Cloud API</td><td>Web search</td><td>Stub response; feature disabled</td></tr>
+      <tr><td>E2B Firecracker</td><td>Cloud API</td><td>Python execution</td><td>OFFLINE ToolResult; feature disabled</td></tr>
+    </tbody>
+  </table>
+
+</div>
+</div>
+
+<!-- ================================================================
+  SDD — SOFTWARE DESIGN DOCUMENT
+================================================================ -->
+<div class="doc" id="doc-sdd">
+<div class="doc-inner">
+
+  <div class="toc">
+    <h4>Contents</h4>
+    <ol>
+      <li><a href="#sdd-1">Architectural Paradigm</a></li>
+      <li><a href="#sdd-2">Monorepo Module Breakdown</a></li>
+      <li><a href="#sdd-3">Core Architectural Patterns</a></li>
+      <li><a href="#sdd-4">Conceptual Data Model</a></li>
+      <li><a href="#sdd-5">Component Interface Overview</a></li>
+      <li><a href="#sdd-6">Security Design</a></li>
+      <li><a href="#sdd-7">Data Flow: Local & Cloud Cycles</a></li>
+    </ol>
+  </div>
+
+  <h2 id="sdd-1" class="doc-section">1. Architectural Paradigm: Thick Client / Thin Server</h2>
+  <div class="callout green">
+    <strong>Core Architectural Decision:</strong> SAGE-AGENT inverts the dominant "thin client / thick server" AI paradigm. The mobile device is the orchestration brain; the Express backend is a stateless proxy — "Hands" that reach upstream resources the device cannot access directly.
+  </div>
+
+  <p>The trust boundary between device and server is absolute:</p>
+  <div class="section">
+    <h3>Device Responsibilities (everything that touches user data)</h3>
+    <ul>
+      <li>All reasoning and tool orchestration (the ReActLoop)</li>
+      <li>Routing decisions (the ArbiterRouter)</li>
+      <li>Memory storage, retrieval, and relevance scoring (sqlite-vec)</li>
+      <li>Local inference (llama.cpp GGUF)</li>
+      <li>Voice pipeline (Porcupine → Whisper.cpp → Piper)</li>
+      <li>Mobile domain tools (all 9: QuickJS, WebView, Contacts, Calendar, Reminders, Files, Memory)</li>
+      <li>Capability manifest and feature gating</li>
+    </ul>
+  </div>
+  <div class="section">
+    <h3>Server Responsibilities (stateless, keyless proxy)</h3>
+    <ul>
+      <li>One inference cycle per request (validate → allowlist check → forward → stream → return)</li>
+      <li>Upstream API key isolation (OpenRouter / Azure AI Foundry / Tavily / E2B keys never reach the device)</li>
+      <li>Cloud domain tool runtime (web_search, fetch_webpage, execute_python, deep_research)</li>
+      <li>SSE streaming the Backend v3 contract back to the device</li>
+    </ul>
+  </div>
+
+  <h2 id="sdd-2" class="doc-section">2. Monorepo Module Breakdown</h2>
+  <p>SAGE-AGENT is structured as an npm workspaces monorepo. The platform-agnostic packages contain all orchestration logic behind typed interfaces — they are testable with no device or native toolchain. The apps wire the same packages to real native bindings.</p>
+
+  <table>
+    <thead><tr><th>Package</th><th>Responsibility</th><th>Key Exports</th></tr></thead>
+    <tbody>
+      <tr><td><code>@sage/shared-types</code></td><td>Canonical domain vocabulary: zero runtime dependencies, types and constants only</td><td>ToolCall, ToolResult, ArbiterSignals, CapabilityManifest, MemoryFragment, SseStreamEvent, SageError</td></tr>
+      <tr><td><code>@sage/sse-contract</code></td><td>Backend v3 SSE wire format: 5 event types + incremental parser + symmetric serializer</td><td>SseParser, serializeSseEvent, decodeSseStream</td></tr>
+      <tr><td><code>@sage/tool-registry</code></td><td>Authoritative two-domain registry (9 mobile / 4 cloud) with runtime integrity check</td><td>ToolRegistry, defaultToolRegistry, TOOL_DEFINITIONS</td></tr>
+      <tr><td><code>@sage/arbiter-core</code></td><td>5-signal ArbiterRouter, ReActLoop (cloud+local targets), ToolDomainRouter, 50-case benchmark</td><td>createArbiterRouter, ReActLoop, ToolDomainRouter, runRoutingBenchmark</td></tr>
+      <tr><td><code>@sage/voice-core</code></td><td>VoicePipeline state machine, engine interfaces, latency tracker, mock engines</td><td>VoicePipeline, WakeWordEngine, SttEngine, TtsEngine, CycleLatency</td></tr>
+      <tr><td><code>@sage/sandbox-core</code></td><td>JsSandbox contract + WASM QuickJS runner + SandboxManager + 38-case benchmark</td><td>createQuickJsWasmSandbox, SandboxManager, runJsBenchmark</td></tr>
+      <tr><td><code>@sage/memory-core</code></td><td>Offline embedder, vector stores, MemoryManager lifecycle, opaque injection, session sim</td><td>MemoryManager, InMemoryVectorStore, createHashingEmbedder, toMemoryFragments</td></tr>
+      <tr><td><code>apps/backend</code></td><td>SAGE Backend v3: stateless Express proxy, SSE emitter, cloud tool runtime, OpenAI-compatible upstream adapter</td><td>POST /api/sage/infer, POST /api/sage/tools/*</td></tr>
+      <tr><td><code>apps/mobile</code></td><td>Expo Bare RN app + three native Expo modules: SageCapability (capability probe), SageTts (Piper), SageOs (Contacts/Calendar/Reminders/Files)</td><td>App.tsx, native modules, src/agent/*, src/voice/*, src/memory/*</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="sdd-3" class="doc-section">3. Core Architectural Patterns</h2>
+
+  <h3>3.1 The ReActLoop — Mobile-Owned Orchestration</h3>
+  <p>The ReActLoop is the central intelligence loop. It runs entirely on-device; the server never knows how many iterations have occurred. Each cycle:</p>
+  <ol>
+    <li>Calls ArbiterRouter → gets <code>{model, target, rationale}</code></li>
+    <li>If <code>target=local</code>: runs on-device via llama.cpp binding (LocalInferenceTarget)</li>
+    <li>If <code>target=cloud</code>: calls POST /api/sage/infer and consumes the SSE stream (CloudInferenceTarget)</li>
+    <li>On <code>tool_call</code> event: delegates to ToolDomainRouter</li>
+    <li>Appends tool_result to messages and loops</li>
+    <li>On <code>text</code> event: yields to UI / TTS</li>
+    <li>On retryable error: descends the graceful degradation hierarchy</li>
+  </ol>
+
+  <h3>3.2 The ArbiterRouter — 5-Signal Evaluation</h3>
+  <p>Evaluates exactly 5 signals before every inference request. Never contacts the network during evaluation.</p>
+  <table>
+    <thead><tr><th>Signal</th><th>Source</th><th>Values</th><th>Hard Override</th></tr></thead>
+    <tbody>
+      <tr><td>Network Quality</td><td>OS network monitor (NetInfo)</td><td>offline / poor / fair / good</td><td>offline → always local</td></tr>
+      <tr><td>Device Power State</td><td>OS battery API + thermal guard</td><td>critical / low / normal / charging</td><td>critical → always local efficient</td></tr>
+      <tr><td>Task Complexity</td><td>On-device heuristic classifier</td><td>simple / moderate / complex</td><td>—</td></tr>
+      <tr><td>Privacy Context</td><td>App state + user preference store</td><td>standard / private / sensitive</td><td>sensitive → always local</td></tr>
+      <tr><td>User Preference</td><td>Encrypted MMKV settings store</td><td>auto / prefer_local / prefer_cloud</td><td>prefer_local → always local</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.3 The Two-Domain Tool Registry</h3>
+  <p>Every tool has an authoritative domain stamp. The ToolDomainRouter dispatches by the registry's domain — not the domain the model places on a tool call — so a model can never trick the device into sending mobile tool arguments to the server.</p>
+
+  <h3>3.4 The SSE Contract</h3>
+  <p>The Backend v3 streams exactly 5 event types. The device's SSE parser and the server's SSE serializer are generated from the same <code>@sage/sse-contract</code> source, making wire compatibility a compile-time guarantee.</p>
+
+  <h2 id="sdd-4" class="doc-section">4. Conceptual Data Model</h2>
+
+  <h3>4.1 Memory Record (stored in sqlite-vec)</h3>
+  <div class="type-block"><span style="color:#9CDCFE">MemoryRecord</span> {
+  id: <span style="color:#CE9178">string</span>           <span style="color:#6A9955">// stable identifier</span>
+  text: <span style="color:#CE9178">string</span>         <span style="color:#6A9955">// original text; source of truth</span>
+  embedding: <span style="color:#CE9178">number[]</span>   <span style="color:#6A9955">// L2-normalized; cosine sim = dot product</span>
+  createdAt: <span style="color:#CE9178">number</span>    <span style="color:#6A9955">// Unix ms</span>
+  lastAccessedAt: <span style="color:#CE9178">number</span>
+  accessCount: <span style="color:#CE9178">number</span>
+  category?: <span style="color:#CE9178">string</span>
+  ttlMs?: <span style="color:#CE9178">number</span>       <span style="color:#6A9955">// optional TTL; pruned at createdAt + ttlMs</span>
+}</div>
+
+  <h3>4.2 Capability Manifest (assembled at cold start)</h3>
+  <div class="type-block"><span style="color:#9CDCFE">CapabilityManifest</span> {
+  platform: <span style="color:#CE9178">'ios'|'android'</span>
+  osVersion: <span style="color:#CE9178">string</span>
+  totalRamBytes: <span style="color:#CE9178">number</span>
+  supports9B: <span style="color:#CE9178">boolean</span>    <span style="color:#6A9955">// RAM >= 8GB</span>
+  gpu: <span style="color:#CE9178">'metal'|'vulkan'|'none'</span>
+  mlAccelerator: <span style="color:#CE9178">'coreml'|'nnapi'|'none'</span>
+  npuPresent: <span style="color:#CE9178">boolean</span>
+  installedModels: <span style="color:#CE9178">InstalledModel[]</span>
+  signalsReady: <span style="color:#CE9178">boolean</span>
+  ready: <span style="color:#CE9178">boolean</span>       <span style="color:#6A9955">// signalsReady AND hasVerifiedModel</span>
+}</div>
+
+  <h3>4.3 Routing Decision (output of ArbiterRouter)</h3>
+  <div class="type-block"><span style="color:#9CDCFE">RoutingDecision</span> {
+  model: <span style="color:#CE9178">string</span>      <span style="color:#6A9955">// e.g. 'gemma-4-2b' or 'anthropic/claude-sonnet-4'</span>
+  target: <span style="color:#CE9178">'local'|'cloud'</span>
+  rationale: <span style="color:#CE9178">string</span>  <span style="color:#6A9955">// human-readable explanation, for audit logs</span>
+}</div>
+
+  <h3>4.4 SSE Event Contract (Backend v3 wire format)</h3>
+  <div class="type-block"><span style="color:#6A9955">// Five event types; Constraint 3 — one inference cycle per request</span>
+<span style="color:#C586C0">type</span> <span style="color:#9CDCFE">SageStreamEvent</span> =
+  | { type: <span style="color:#CE9178">'chunk'</span>;     delta: string; index: number; finish_reason: string|null }
+  | { type: <span style="color:#CE9178">'tool_call'</span>; id: string; name: ToolName; arguments: object; domain: ToolDomain }
+  | { type: <span style="color:#CE9178">'done'</span>;      stop_reason: string; model: string; usage: UsageStats }
+  | { type: <span style="color:#CE9178">'error'</span>;     code: SageErrorCode; message: string; retryable: boolean }
+  | { type: <span style="color:#CE9178">'heartbeat'</span>; ts: number }</div>
+
+  <h2 id="sdd-5" class="doc-section">5. Component Interface Overview</h2>
+
+  <h3>5.1 Platform Differentiation</h3>
+  <table>
+    <thead><tr><th>Concern</th><th>iOS</th><th>Android</th></tr></thead>
+    <tbody>
+      <tr><td>GPU acceleration (llama.cpp)</td><td>Metal (MPS)</td><td>Vulkan</td></tr>
+      <tr><td>Hardware ML accelerator</td><td>Core ML / Apple Neural Engine</td><td>NNAPI</td></tr>
+      <tr><td>OS automation</td><td>App Intents / EventKit / Contacts</td><td>Shortcuts / CalendarContract / ContactsContract</td></tr>
+      <tr><td>Secure storage</td><td>iOS Keychain</td><td>Android Keystore (StrongBox)</td></tr>
+      <tr><td>Thermal monitoring</td><td>ProcessInfo.thermalState</td><td>PowerManager.currentThermalStatus (API 29+)</td></tr>
+      <tr><td>File access</td><td>Files.app (Documents dir)</td><td>SAF (Storage Access Framework, filesDir)</td></tr>
+      <tr><td>TTS audio playback</td><td>AVAudioEngine</td><td>AudioTrack (PCM float)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.2 The Testability Architecture</h3>
+  <p>Every platform-specific concern is hidden behind a typed interface with a deterministic mock implementation. This is the key architectural decision that enables all governance gates to be verified in a Linux CI container with no device:</p>
+  <table>
+    <thead><tr><th>Interface</th><th>Real impl (device)</th><th>Test impl (CI)</th></tr></thead>
+    <tbody>
+      <tr><td>NativeCapabilityProbe</td><td>SageCapabilityModule (Swift/Kotlin)</td><td>createMockCapabilityProbe()</td></tr>
+      <tr><td>SignalProvider</td><td>Native signal readers (NetInfo, expo-battery)</td><td>createMockSignalProvider()</td></tr>
+      <tr><td>InferenceTarget</td><td>llama.rn + CloudTarget (fetch+SSE)</td><td>createScriptedTarget()</td></tr>
+      <tr><td>WakeWordEngine / SttEngine / TtsEngine</td><td>Porcupine / whisper.rn / SageTts</td><td>createMockWake/Stt/Tts()</td></tr>
+      <tr><td>JsSandbox</td><td>react-native-quickjs (JSI)</td><td>createQuickJsWasmSandbox() (WASM)</td></tr>
+      <tr><td>MemoryStore</td><td>sqliteVecStore (op-sqlite + SQLCipher)</td><td>InMemoryVectorStore</td></tr>
+      <tr><td>MobileToolHandler</td><td>osToolHandlers / sandboxHandlers</td><td>okMobileHandler (echo)</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="sdd-6" class="doc-section">6. Security Design</h2>
+
+  <h3>6.1 API Key Isolation</h3>
+  <p>No upstream API key (OpenRouter, Tavily, E2B, Azure AI Foundry) ever touches the device. The mobile client authenticates only to SAGE Backend v3 using a session token (stored in Keychain/Keystore). The backend holds all upstream credentials and applies only an allowlist check before proxying requests — it never overrides the device's model selection.</p>
+
+  <h3>6.2 Encryption at Rest</h3>
+  <table>
+    <thead><tr><th>Store</th><th>Contents</th><th>Encryption</th></tr></thead>
+    <tbody>
+      <tr><td>WatermelonDB</td><td>Conversations, skills, agent state</td><td>SQLCipher (AES-256); key from Keychain/Keystore</td></tr>
+      <tr><td>sqlite-vec</td><td>Memory vectors + text</td><td>Same SQLCipher database and key</td></tr>
+      <tr><td>MMKV</td><td>Settings, KV cache, routing preferences</td><td>MMKV encryptionKey (AES); key from Keychain/Keystore</td></tr>
+    </tbody>
+  </table>
+
+  <h3>6.3 Code Execution Sandboxing (App Store 2.5.2)</h3>
+  <p>Generated JS code is data, not app code. It executes inside a fresh QuickJS runtime+context per run with:</p>
+  <ul>
+    <li>No bridge to native modules, the React tree, file system, or network</li>
+    <li>Enforced memory limit (64MB default), stack limit (512KB), and interrupt handler (1s timeout)</li>
+    <li>Only a capturing <code>console.log</code> injected — no other host globals</li>
+    <li>Context torn down after every execution (no shared state between runs)</li>
+  </ul>
+  <p>HTML prototypes render in a locked-down WebView with all native bridges disabled, <code>file://</code> access denied, and no <code>postMessage</code> channel to native.</p>
+
+  <h2 id="sdd-7" class="doc-section">7. Data Flow: Local & Cloud Inference Cycles</h2>
+
+  <h3>7.1 Local Target Cycle (Offline / Hard Override)</h3>
+  <pre><code>User voice/text
+  → ReActLoop.run(messages, memories)
+  → ArbiterRouter.route({signals, capability})
+  → { model: 'gemma-4-2b', target: 'local' }     ← hard override (offline/critical/sensitive/prefer_local)
+  → LocalInferenceTarget.run(messages)
+  → llama.cpp GGUF on-device inference (Metal/Vulkan)
+  → stream: text tokens | &lt;tool_call&gt; blocks
+  → ToolDomainRouter.dispatch(call)               ← mobile domain only
+  → MobileToolHandler (QuickJS / OS APIs / sqlite-vec)
+  → tool_result appended → next iteration
+  → TTS (Piper, on-device)</code></pre>
+
+  <h3>7.2 Cloud Target Cycle</h3>
+  <pre><code>User voice/text
+  → ReActLoop.run(messages, memories)
+  → MemoryManager.recall(transcript, 5)           ← on-device, never sent raw
+  → ArbiterRouter.route({signals, capability})
+  → { model: 'anthropic/claude-sonnet-4', target: 'cloud' }
+  → CloudInferenceTarget.fetch(POST /api/sage/infer, {
+      model, messages, memories: [...opaque fragments...]
+    })
+  → SAGE Backend v3:
+      validate → allowlist-check model → inject memories verbatim
+      → upstream (OpenRouter / Azure AI Foundry)
+      → SSE stream: chunk | tool_call | done | error | heartbeat
+  → Device decodes SSE stream
+  → On tool_call: ToolDomainRouter.dispatch(call)
+      - cloud domain → POST /api/sage/tools/* (Tavily / E2B)
+      - mobile domain → on-device (never server-routed)
+      - offline + cloud → OFFLINE ToolResult
+  → tool_result appended → next iteration
+  → TTS (Piper, on-device)</code></pre>
+
+</div>
+</div>
+
+<!-- ================================================================
+  TSD — TECHNICAL SPECIFICATION DOCUMENT
+================================================================ -->
+<div class="doc" id="doc-tsd">
+<div class="doc-inner">
+
+  <div class="toc">
+    <h4>Contents</h4>
+    <ol>
+      <li><a href="#tsd-1">Technology Stack</a></li>
+      <li><a href="#tsd-2">API Specifications</a></li>
+      <li><a href="#tsd-3">Key Type Signatures</a></li>
+      <li><a href="#tsd-4">Algorithm Specifications</a></li>
+      <li><a href="#tsd-5">Compliance & Security Specification</a></li>
+      <li><a href="#tsd-6">Testing & Governance Gates</a></li>
+      <li><a href="#tsd-7">Deployment Guidance</a></li>
+    </ol>
+  </div>
+
+  <h2 id="tsd-1" class="doc-section">1. Technology Stack</h2>
+  <table>
+    <thead><tr><th>Layer</th><th>Technology</th><th>Version</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Mobile Framework</strong></td><td>React Native (Expo Bare Workflow)</td><td>SDK 51 / RN 0.74</td><td>Cross-platform iOS + Android; New Architecture (Fabric / JSI) enabled</td></tr>
+      <tr><td><strong>Local LLM</strong></td><td>llama.rn (llama.cpp)</td><td>0.4.x</td><td>GGUF inference on-device; Metal (iOS) / Vulkan (Android) GPU offload</td></tr>
+      <tr><td><strong>Local STT</strong></td><td>whisper.rn (Whisper.cpp)</td><td>0.4.x</td><td>Real-time on-device speech-to-text; offline, no network</td></tr>
+      <tr><td><strong>Local TTS</strong></td><td>Piper (VITS ONNX) via SageTts native module</td><td>—</td><td>On-device neural TTS; ONNX Runtime (onnxruntime-objc / onnxruntime-android)</td></tr>
+      <tr><td><strong>Wake Word</strong></td><td>Picovoice Porcupine</td><td>3.0.x</td><td>Ultra-low-power always-on wake word; fully on-device</td></tr>
+      <tr><td><strong>Vector DB</strong></td><td>sqlite-vec (vec0 virtual table)</td><td>—</td><td>On-device HNSW nearest-neighbor search via op-sqlite</td></tr>
+      <tr><td><strong>Relational DB</strong></td><td>WatermelonDB</td><td>—</td><td>Offline-first relational state (conversations, skills)</td></tr>
+      <tr><td><strong>Encryption</strong></td><td>SQLCipher (AES-256)</td><td>—</td><td>All local database files encrypted at rest</td></tr>
+      <tr><td><strong>Key-Value Store</strong></td><td>react-native-mmkv</td><td>2.12.x</td><td>Fast encrypted settings and KV cache</td></tr>
+      <tr><td><strong>JS Sandbox (mobile)</strong></td><td>react-native-quickjs (JSI)</td><td>0.2.x</td><td>On-device isolated QuickJS execution; App Store 2.5.2 compliant</td></tr>
+      <tr><td><strong>JS Sandbox (tests/web)</strong></td><td>quickjs-emscripten (WASM)</td><td>0.31.x</td><td>Node/browser reference implementation; same contract as JSI binding</td></tr>
+      <tr><td><strong>Cloud Python Sandbox</strong></td><td>E2B Firecracker (via @e2b/code-interpreter)</td><td>—</td><td>Isolated microVM Python execution; no security escapes</td></tr>
+      <tr><td><strong>Web Search</strong></td><td>Tavily API</td><td>—</td><td>Structured search; stable JSON (replaces DuckDuckGo scraping)</td></tr>
+      <tr><td><strong>Page Fetch</strong></td><td>Jina Reader API</td><td>—</td><td>Clean markdown page extraction</td></tr>
+      <tr><td><strong>Cloud Backend</strong></td><td>Express (SAGE Backend v3)</td><td>4.21.x</td><td>Stateless proxy; no framework-specific routing magic</td></tr>
+      <tr><td><strong>Upstream Adapter</strong></td><td>OpenAI-compatible REST</td><td>—</td><td>Works for both OpenRouter and Azure AI Foundry without code duplication</td></tr>
+      <tr><td><strong>Validation</strong></td><td>Zod</td><td>3.23.x</td><td>Runtime schema validation at the backend boundary</td></tr>
+      <tr><td><strong>Language</strong></td><td>TypeScript</td><td>5.6.x</td><td>Strict mode, noUncheckedIndexedAccess, composite project references</td></tr>
+      <tr><td><strong>Build Tool</strong></td><td>esbuild (web preview)</td><td>0.28.x</td><td>Bundles @sage/* packages for browser without native dependencies</td></tr>
+      <tr><td><strong>Test Runner</strong></td><td>Vitest</td><td>2.1.x</td><td>All 117 tests run in Node with no device; workspace alias resolution</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="tsd-2" class="doc-section">2. API Specifications</h2>
+
+  <h3>2.1 POST /api/sage/infer</h3>
+  <div class="api-endpoint">
+    <div class="api-header"><span class="method m-post">POST</span><span class="api-path">/api/sage/infer</span><span class="badge b-green">SSE stream</span></div>
+    <div class="api-body">
+      <p><strong>Request Body (Zod validated):</strong></p>
+<pre><code>{
+  model: string,            // ArbiterRouter's selection; allowlist-checked server-side only
+  target?: 'cloud',         // optional; server only handles cloud target
+  messages: Message[],      // full conversation context
+  memories?: MemoryFragment[], // opaque fragments from sqlite-vec; backend treats as prompt text
+  tools?: unknown[],        // LLM-formatted tool schemas
+  temperature?: number,
+  max_tokens?: number
+}</code></pre>
+      <p><strong>Response (text/event-stream; SSE):</strong></p>
+<pre><code>event: heartbeat
+data: {"ts": 1719000000000}    // immediate flush; resets client timeout
+
+event: chunk
+data: {"delta": "Hello", "index": 0, "finish_reason": null}
+
+event: tool_call
+data: {"id": "tc_1", "name": "web_search", "arguments": {...}, "domain": "cloud"}
+
+event: done
+data: {"stop_reason": "stop", "model": "...", "usage": {"prompt_tokens": 10, ...}}
+
+event: error
+data: {"code": "UPSTREAM_ERROR", "message": "...", "retryable": true}</code></pre>
+      <p><strong>Error Responses (HTTP, non-streaming):</strong></p>
+      <ul>
+        <li><code>400</code> <code>INVALID_REQUEST</code> — Zod validation failure</li>
+        <li><code>403</code> <code>MODEL_NOT_ALLOWED</code> — model not on server allowlist (Constraint 2)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>2.2 POST /api/sage/tools/*</h3>
+  <div class="api-endpoint">
+    <div class="api-header"><span class="method m-post">POST</span><span class="api-path">/api/sage/tools/search</span></div>
+    <div class="api-body"><p>Body: <code>{"query": string, "maxResults"?: number}</code> → Tavily response JSON</p></div>
+  </div>
+  <div class="api-endpoint">
+    <div class="api-header"><span class="method m-post">POST</span><span class="api-path">/api/sage/tools/fetch</span></div>
+    <div class="api-body"><p>Body: <code>{"url": string}</code> → <code>{"url": string, "markdown": string}</code> via Jina Reader</p></div>
+  </div>
+  <div class="api-endpoint">
+    <div class="api-header"><span class="method m-post">POST</span><span class="api-path">/api/sage/tools/execute</span></div>
+    <div class="api-body"><p>Body: <code>{"code": string, "timeoutMs"?: number}</code> → E2B sandbox result (stdout/stderr/results) if <code>E2B_API_KEY</code> set; else stub</p></div>
+  </div>
+  <div class="api-endpoint">
+    <div class="api-header"><span class="method m-post">POST</span><span class="api-path">/api/sage/tools/research</span></div>
+    <div class="api-body"><p>Body: <code>{"topic": string, "depth"?: "shallow"|"standard"|"deep"}</code> → <code>ResearchBrief</code> (topic, summary, keyPoints[], sources[]) via Tavily + Jina</p></div>
+  </div>
+  <div class="api-endpoint">
+    <div class="api-header"><span class="method m-get">GET</span><span class="api-path">/health</span></div>
+    <div class="api-body"><p>Returns: <code>{"ok": true, "service": "sage-backend-v3", "provider": string}</code></p></div>
+  </div>
+
+  <h3>2.3 Azure AI Foundry Endpoint (preferred upstream)</h3>
+  <pre><code>POST {SAGE_UPSTREAM_BASE_URL}/openai/deployments/{deployment}/chat/completions?api-version=2024-10-21
+Authorization header: api-key {SAGE_UPSTREAM_API_KEY}
+Body: OpenAI-compatible /chat/completions JSON with stream: true</code></pre>
+  <div class="callout amber"><strong>Auth style:</strong> Azure Foundry uses the <code>api-key</code> header (not <code>Authorization: Bearer</code>). The backend's <code>buildEndpoint()</code> sets the correct header per provider automatically.</div>
+
+  <h2 id="tsd-3" class="doc-section">3. Key Type Signatures</h2>
+
+  <h3>3.1 Two-Domain Tool Registry (13 tools after Phase 6)</h3>
+  <div class="type-block"><span style="color:#C586C0">type</span> <span style="color:#9CDCFE">MobileToolName</span> =
+  | <span style="color:#CE9178">'execute_js'</span>           <span style="color:#6A9955">// QuickJS isolated context</span>
+  | <span style="color:#CE9178">'render_prototype'</span>     <span style="color:#6A9955">// sandboxed WebView</span>
+  | <span style="color:#CE9178">'read_native_contacts'</span> <span style="color:#6A9955">// Contacts / ContactsContract</span>
+  | <span style="color:#CE9178">'create_calendar_event'</span><span style="color:#6A9955">// EventKit / CalendarContract</span>
+  | <span style="color:#CE9178">'query_calendar'</span>       <span style="color:#6A9955">// calendar range query</span>
+  | <span style="color:#CE9178">'set_reminder'</span>         <span style="color:#6A9955">// EventKit / AlarmManager</span>
+  | <span style="color:#CE9178">'list_reminders'</span>       <span style="color:#6A9955">// reminders list</span>
+  | <span style="color:#CE9178">'file_system'</span>          <span style="color:#6A9955">// sandboxed Files.app / SAF</span>
+  | <span style="color:#CE9178">'search_local_memory'</span>; <span style="color:#6A9955">// sqlite-vec top-k</span>
+
+<span style="color:#C586C0">type</span> <span style="color:#9CDCFE">CloudToolName</span> =
+  | <span style="color:#CE9178">'web_search'</span>    <span style="color:#6A9955">// Tavily</span>
+  | <span style="color:#CE9178">'fetch_webpage'</span> <span style="color:#6A9955">// Jina Reader</span>
+  | <span style="color:#CE9178">'execute_python'</span><span style="color:#6A9955">// E2B Firecracker</span>
+  | <span style="color:#CE9178">'deep_research'</span>; <span style="color:#6A9955">// Tavily + Jina orchestrated</span></div>
+
+  <h3>3.2 SageErrorCode (closed set; stable wire values)</h3>
+  <div class="type-block"><span style="color:#C586C0">type</span> <span style="color:#9CDCFE">SageErrorCode</span> =
+  | <span style="color:#CE9178">'OFFLINE'</span>           <span style="color:#6A9955">// cloud tool/target without connectivity</span>
+  | <span style="color:#CE9178">'PERMISSION_DENIED'</span>  <span style="color:#6A9955">// OS permission refused; NON-RETRYABLE</span>
+  | <span style="color:#CE9178">'TIMEOUT'</span>            <span style="color:#6A9955">// operation exceeded time budget</span>
+  | <span style="color:#CE9178">'NOT_INSTALLED'</span>      <span style="color:#6A9955">// required GGUF model / asset missing</span>
+  | <span style="color:#CE9178">'UNSUPPORTED'</span>        <span style="color:#6A9955">// capability absent; NON-RETRYABLE</span>
+  | <span style="color:#CE9178">'INVALID_REQUEST'</span>    <span style="color:#6A9955">// validation failure; NON-RETRYABLE</span>
+  | <span style="color:#CE9178">'MODEL_NOT_ALLOWED'</span>  <span style="color:#6A9955">// server allowlist; NON-RETRYABLE</span>
+  | <span style="color:#CE9178">'UPSTREAM_ERROR'</span>     <span style="color:#6A9955">// frontier provider error; retryable</span>
+  | <span style="color:#CE9178">'SANDBOX_ERROR'</span>      <span style="color:#6A9955">// QuickJS / E2B execution fault</span>
+  | <span style="color:#CE9178">'INTERNAL'</span>;          <span style="color:#6A9955">// unclassified</span>
+
+<span style="color:#6A9955">// Non-retryable set (ReActLoop does NOT descend the degradation hierarchy)</span>
+<span style="color:#C586C0">const</span> NON_RETRYABLE = <span style="color:#C586C0">new</span> Set([
+  <span style="color:#CE9178">'PERMISSION_DENIED'</span>, <span style="color:#CE9178">'INVALID_REQUEST'</span>, <span style="color:#CE9178">'MODEL_NOT_ALLOWED'</span>, <span style="color:#CE9178">'UNSUPPORTED'</span>
+]);</div>
+
+  <h2 id="tsd-4" class="doc-section">4. Algorithm Specifications</h2>
+
+  <h3>4.1 ArbiterRouter Routing Algorithm</h3>
+  <p>Evaluated in strict precedence order. The output is <code>RoutingDecision {model, target, rationale}</code>:</p>
+  <pre><code>function route(signals, capability):
+
+  // 1. HARD OVERRIDES — always local, no exceptions
+  if signals.network === 'offline'        → local, model=chooseLocal(complexity, capability, forceEfficient=false)
+  if signals.power === 'critical'         → local, model=DEFAULT_LOCAL (2B, efficient tier)
+  if signals.privacy === 'sensitive'      → local, model=chooseLocal(complexity, capability)
+  if signals.preference === 'prefer_local'→ local, model=chooseLocal(complexity, capability)
+
+  // 2. EXPLICIT CLOUD PREFERENCE — skip soft guidance
+  if signals.preference === 'prefer_cloud'
+    → cloud, model = complexity==='complex' ? cloud.capable : cloud.efficient
+
+  // 3. SOFT GUIDANCE — lean local when marginal
+  if signals.network === 'poor' AND signals.complexity === 'simple'
+    → local, model=DEFAULT_LOCAL
+  if signals.power === 'low' AND signals.complexity !== 'complex'
+    → local, model=DEFAULT_LOCAL
+
+  // 4. DEFAULT — cloud, tier by complexity
+  → cloud, model = complexity==='complex' ? cloud.capable : cloud.efficient
+
+function chooseLocal(complexity, capability, forceEfficient=false):
+  if forceEfficient: return LOCAL_MODELS.default  // 2B always for critical battery
+  if complexity==='complex' AND has9B(capability): return LOCAL_MODELS.capable  // 9B
+  return LOCAL_MODELS.default  // 2B</code></pre>
+
+  <h3>4.2 Graceful Degradation Hierarchy</h3>
+  <pre><code>function buildDescent(decision):
+  if decision.target === 'cloud':
+    attempts = [
+      {cloud, decision.model},          // router's choice first (may be capable or efficient)
+      {cloud, cloud.efficient},          // step down to efficient cloud (if not already there)
+      {local, bestLocalModel()},         // cross to local (never escalates back up)
+      {local, LOCAL_MODELS.default}      // floor: 2B efficient model
+    ]
+  else: // local decision = offline/privacy/prefer_local
+    attempts = [
+      {local, decision.model},           // chosen model
+      {local, LOCAL_MODELS.default}      // floor: 2B
+    ]
+    // Local decisions NEVER escalate to cloud.
+
+On each attempt:
+  - If first event is 'error' AND retryable AND hasNextAttempt → onDegrade(from, to) → descend
+  - If first event is 'error' AND NOT retryable → surface immediately (no degradation)
+  - If first event is any other type → commit to this attempt, stream remainder</code></pre>
+
+  <h3>4.3 Complexity Classifier (Signal 3)</h3>
+  <p>Deterministic heuristic; no model, no network; same input always yields same output:</p>
+  <pre><code>function scoreComplexity(text):
+  score = 0
+  if wordCount(text) > 60:   score += 2
+  elif wordCount(text) > 25: score += 1
+  if hasCodeCues(text):      score += 2   // ```, =>, function, class, import, const, def
+  if isResearchy(text):      score += 2   // research, analyze, compare, synthesize, cite...
+  if researchVerbCount >= 2: score += 1   // stacking multiple research verbs
+  if isMultiStep(text):      score += 1   // "and then", "after that", numbered lists
+  if isDeepQuestion(text):   score += 1   // why, how, explain, derive, prove
+
+  if score >= 4: return 'complex'
+  if score >= 2: return 'moderate'
+  return 'simple'</code></pre>
+
+  <h3>4.4 Memory Relevance Scoring (for capacity pruning)</h3>
+  <pre><code>// Used by MemoryManager.prune() to evict lowest-relevance records beyond capacity.
+// Higher score = more worth keeping.
+function relevanceScore(record, now):
+  ageMs = max(0, now - record.lastAccessedAt)
+  recency = 0.5 ^ (ageMs / HALF_LIFE)      // HALF_LIFE default = 30 days
+                                             // → 1 when just accessed, → 0 as it ages
+  frequency = log2(record.accessCount + 1)  // log scale; avoids runaway inflation
+  return recency + 0.25 * frequency</code></pre>
+
+  <h3>4.5 Memory Recall Procedure</h3>
+  <pre><code>function recall(query, topK=5):
+  queryEmbedding = l2normalize(embedder.embed(query))
+  raw = store.search(queryEmbedding, topK * 2)   // over-fetch to allow expiry filtering
+  hits = []
+  for hit in raw:
+    if isExpired(hit.record, now):
+      store.delete(hit.record.id)               // lazy expiry on read path
+      continue
+    hit.record.lastAccessedAt = now
+    hit.record.accessCount += 1
+    store.upsert(hit.record)                    // bump access stats
+    hits.append(hit)
+    if len(hits) >= topK: break
+  return hits</code></pre>
+
+  <h2 id="tsd-5" class="doc-section">5. Compliance & Security Specification</h2>
+
+  <h3>5.1 Apple App Store Guideline 2.5.2 Compliance</h3>
+  <div class="callout blue"><strong>Rule:</strong> Apps may not download, install, or execute code which introduces or changes features or functionality of the app.</div>
+  <table>
+    <thead><tr><th>Execution path</th><th>Mechanism</th><th>Compliance evidence</th></tr></thead>
+    <tbody>
+      <tr><td><code>execute_js</code></td><td>Fresh QuickJS runtime+context per execution; no native bridge; no module resolution; context torn down after run</td><td>Tested: <code>typeof process === 'undefined'</code>, <code>typeof require === 'undefined'</code>, <code>typeof fetch === 'undefined'</code></td></tr>
+      <tr><td><code>render_prototype</code></td><td>Locked-down WKWebView; JS bridges disabled; <code>file://</code> access denied; no <code>postMessage</code> to native</td><td>Visual preview surface only; no native capability exposed</td></tr>
+      <tr><td>Skills (future)</td><td>JSON definitions + JS executed in the same isolated QuickJS context; never bundled in the app binary</td><td>Code is data; no IPA modification</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.2 Cryptographic Key Lifecycle</h3>
+  <ol>
+    <li>On first launch: generate a CSPRNG key for SQLCipher and a separate key for MMKV</li>
+    <li>Store keys in iOS Keychain (<code>kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly</code>) or Android Keystore (StrongBox where available)</li>
+    <li>Keys are never written to JavaScript-accessible storage</li>
+    <li>Keys are never logged</li>
+    <li>Session token for SAGE Backend v3 stored under the same protection class</li>
+  </ol>
+
+  <h3>5.3 Memory Privacy Audit Specification</h3>
+  <p>The backend <code>/api/sage/infer</code> route logs only the following — never memory text or message content:</p>
+  <pre><code>[infer] model={model} messages={count} memories={count}</code></pre>
+  <p>This is verified by an automated spy test in CI (<code>apps/backend/test/privacy.test.ts</code>) that plants a sentinel string in <code>memories[]</code> and asserts it never appears in captured console output.</p>
+
+  <h2 id="tsd-6" class="doc-section">6. Testing & Governance Gates</h2>
+  <p>117 tests across 18 test files, all running in a Linux Node container with no device or native toolchain. The following are the binding governance gates — all must pass before a phase transition.</p>
+  <table>
+    <thead><tr><th>Gate</th><th>File</th><th>Threshold</th><th>Verified Result</th></tr></thead>
+    <tbody>
+      <tr><td>5 ArbiterRouter signals valid at cold start</td><td>arbiter-core/test/signals.test.ts</td><td>All valid domain values</td><td>✅ Pass</td></tr>
+      <tr><td>ArbiterRouter 10-scenario classification (A→B)</td><td>arbiter-core/test/router.test.ts</td><td>10/10</td><td>✅ 10/10</td></tr>
+      <tr><td>50-case routing benchmark (B→C)</td><td>arbiter-core/test/routingBenchmark.test.ts</td><td>≥85% (≥43/50)</td><td>✅ 100% (50/50)</td></tr>
+      <tr><td>ReActLoop 5 task types + ≥99% tool-loop completion</td><td>arbiter-core/test/reactLoop.test.ts</td><td>≥99%</td><td>✅ 100% (25/25)</td></tr>
+      <tr><td>ToolDomainRouter 10→13 tools (all domains correct)</td><td>arbiter-core/test/toolDomainRouter.test.ts</td><td>All correct</td><td>✅ Pass</td></tr>
+      <tr><td>SSE parser covers all 5 event types + round-trip</td><td>sse-contract/test/parser.test.ts</td><td>All 5 types</td><td>✅ 13/13</td></tr>
+      <tr><td>Backend SSE smoke test (live /api/sage/infer)</td><td>backend/test/infer.smoke.test.ts</td><td>Heartbeat→chunk→done</td><td>✅ Pass</td></tr>
+      <tr><td>ReActLoop ↔ live backend integration</td><td>backend/test/reactloop.integration.test.ts</td><td>Cloud cycle + allowlist</td><td>✅ Pass</td></tr>
+      <tr><td>QuickJS benchmark ≥99%</td><td>sandbox-core/test/quickjs.test.ts</td><td>≥99% (≥38/38)</td><td>✅ 100% (38/38)</td></tr>
+      <tr><td>QuickJS isolation (no host globals)</td><td>sandbox-core/test/quickjs.test.ts</td><td>All checks pass</td><td>✅ Pass</td></tr>
+      <tr><td>Memory retrieval p95 &lt;100ms at 100k</td><td>memory-core/test/memory.test.ts</td><td>&lt;100ms p95</td><td>✅ ~33ms p95</td></tr>
+      <tr><td>Session-sim ≥80% local completion</td><td>memory-core/test/memory.test.ts</td><td>≥80%</td><td>✅ 88.2%</td></tr>
+      <tr><td>Privacy audit (memory never in logs)</td><td>backend/test/privacy.test.ts</td><td>Zero leakage</td><td>✅ Pass</td></tr>
+      <tr><td>Native-tool benchmark ≥95% (24-task suite)</td><td>arbiter-core/test/nativeTools.test.ts</td><td>≥95%</td><td>✅ 100% (24/24)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Test Run Command</h3>
+  <pre><code># From the monorepo root:
+npm run typecheck   # tsc -b across all packages + backend → exit 0
+npm test            # vitest run → 117/117 passing</code></pre>
+
+  <h2 id="tsd-7" class="doc-section">7. Deployment Guidance</h2>
+
+  <h3>7.1 SAGE Backend v3</h3>
+  <pre><code># Environment variables (see apps/backend/.env.example):
+PORT=8787
+SAGE_UPSTREAM_PROVIDER=azure-foundry  # or openrouter | mock
+SAGE_UPSTREAM_BASE_URL=https://{resource}.openai.azure.com
+SAGE_UPSTREAM_API_KEY={azure-key}
+SAGE_AZURE_API_VERSION=2024-10-21
+SAGE_ALLOWED_MODELS=google/gemini-2.5-flash,anthropic/claude-sonnet-4,...
+TAVILY_API_KEY={tavily-key}
+E2B_API_KEY={e2b-key}
+SAGE_HEARTBEAT_MS=15000
+
+# Run:
+cd apps/backend &amp;&amp; npm run start  # production
+npm run backend:dev              # development (tsx watch)</code></pre>
+
+  <h3>7.2 Mobile App Build</h3>
+  <pre><code># Install:
+cd apps/mobile &amp;&amp; npm install
+
+# Generate native projects (first time / after native dep changes):
+npx expo prebuild --clean
+
+# Run on device:
+npx expo run:ios      # requires Xcode on macOS
+npx expo run:android  # requires Android Studio
+
+# Environment (app.config.js / .env):
+EXPO_PUBLIC_SAGE_BACKEND_URL=https://your-backend.example.com
+EXPO_PUBLIC_PICOVOICE_KEY={picovoice-access-key}</code></pre>
+
+  <h3>7.3 Required Asset Provisioning</h3>
+  <table>
+    <thead><tr><th>Asset</th><th>Location on Device</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td>Gemma 4 2B GGUF (default model)</td><td>iOS: <code>Documents/models/gemma-4-2b-q4.gguf</code><br/>Android: <code>filesDir/models/gemma-4-2b-q4.gguf</code></td><td>Downloaded on first launch from CDN; verified by GGUF magic bytes (0x47 0x47 0x55 0x46)</td></tr>
+      <tr><td>Gemma 4 9B GGUF (opt-in, ≥8GB RAM)</td><td>Same folder, <code>gemma-4-9b-q4.gguf</code></td><td>Optional download; gated by CapabilityManifest.supports9B</td></tr>
+      <tr><td>Whisper.cpp model (ggml-base.en.bin or similar)</td><td>App Documents/models/</td><td>whisper.rn compatible; downloaded on first launch</td></tr>
+      <tr><td>Piper voice model (.onnx + .onnx.json)</td><td>Bundled in app or downloaded at first launch</td><td>Piper VITS ONNX from piper.rhasspy.org</td></tr>
+      <tr><td>Picovoice "Hey Sage" keyword (.ppn)</td><td>Bundled in app assets</td><td>Generated in Picovoice Console; falls back to push-to-talk if absent</td></tr>
+    </tbody>
+  </table>
+
+  <h3>7.4 Model Tiering</h3>
+  <table>
+    <thead><tr><th>Model</th><th>ID</th><th>Target</th><th>Condition</th></tr></thead>
+    <tbody>
+      <tr><td>Gemma 4 2B (efficient local)</td><td>gemma-4-2b</td><td>local</td><td>Default triage and fast-response model; always the floor</td></tr>
+      <tr><td>Gemma 4 9B (capable local)</td><td>gemma-4-9b</td><td>local</td><td>Opt-in; gated for devices with ≥8GB RAM AND 9B verified in CapabilityManifest</td></tr>
+      <tr><td>Gemini 2.5 Flash (efficient cloud)</td><td>google/gemini-2.5-flash</td><td>cloud</td><td>Default cloud tier for simple + moderate tasks</td></tr>
+      <tr><td>Claude Sonnet 4 (capable cloud)</td><td>anthropic/claude-sonnet-4</td><td>cloud</td><td>Complex tasks; first entry in cloud degradation descent</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green" style="margin-top:2.4rem">
+    <strong>All six phases (0–6) are complete.</strong> 117 tests passing. <code>tsc -b</code> clean. Repository: <strong>LG-Gibs/sage-agent</strong> on GitHub.
+  </div>
+
+</div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="pagefooter">
+  SAGE-AGENT Engineering Documentation Suite · v0.1.0 · LG-Gibs/sage-agent · Phases 0–6 Complete
+</div>
+
+<script>
+(function(){
+  const tabs = document.querySelectorAll('.dtab');
+  const docs = document.querySelectorAll('.doc');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const id = tab.dataset.doc;
+      tabs.forEach(t => t.classList.toggle('on', t.dataset.doc === id));
+      docs.forEach(d => d.classList.toggle('on', d.id === 'doc-' + id));
+      window.scrollTo({top: 0, behavior: 'instant'});
+    });
+  });
+})();
+</script>
+</body>
+</html>
