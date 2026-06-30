@@ -11,18 +11,29 @@ function quickjs(): Promise<QuickJSWASMModule> {
   return (modulePromise ??= getQuickJS());
 }
 
+export interface QuickJsSandboxOptions {
+  /**
+   * Pre-built QuickJS WASM module. In Node/CI this is omitted and the default
+   * `getQuickJS()` loads the wasm from disk. In the browser, a singlefile
+   * (embedded-wasm) variant module is injected so no runtime fetch is needed —
+   * the execute() logic below is identical either way.
+   */
+  module?: QuickJSWASMModule;
+}
+
 /**
  * QuickJS sandbox backed by the Emscripten WASM build. Runs in Node, CI, and
- * web — used here for the benchmark and isolation tests. Each execute() spins a
- * fresh runtime + context (no shared state), injects only a capturing
- * console.log, and enforces memory/stack/time limits. There is NO bridge to the
- * host: process, require, fetch, and any host globals are simply absent.
+ * web — used for the benchmark and isolation tests, and (with an injected
+ * browser module) the interactive preview. Each execute() spins a fresh
+ * runtime + context (no shared state), injects only a capturing console.log,
+ * and enforces memory/stack/time limits. There is NO bridge to the host:
+ * process, require, fetch, and any host globals are simply absent.
  */
-export function createQuickJsWasmSandbox(): JsSandbox {
+export function createQuickJsWasmSandbox(opts: QuickJsSandboxOptions = {}): JsSandbox {
   return {
     async execute(code: string, limits?: SandboxLimits): Promise<SandboxResult> {
       const lim = { ...DEFAULT_LIMITS, ...limits };
-      const QuickJS = await quickjs();
+      const QuickJS = opts.module ?? (await quickjs());
       const runtime = QuickJS.newRuntime();
       runtime.setMemoryLimit(lim.memoryBytes);
       runtime.setMaxStackSize(lim.maxStackBytes);

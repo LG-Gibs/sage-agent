@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SAGE-AGENT — Interactive Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --green:#2FBF77; --green-soft:rgba(47,191,119,.13); --green-line:rgba(47,191,119,.32);
+  --amber:#FFB612; --amber-soft:rgba(255,182,18,.13);
+  --red:#E5484D; --red-soft:rgba(229,72,77,.13); --blue:#5B8DEF; --purple:#9B6DFF;
+  --page:#06070A; --screen:#0A0D12; --card:#11151C; --card2:#151A22; --elev:#1A2029;
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
+  --text:#EAECEF; --head:#fff; --muted:#969BA4; --dim:#6B7079; --faint:#474C54;
+  --display:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(120% 80% at 50% -10%,#0d1320,#060709 60%);color:var(--text);
+  font-family:var(--body);min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px 12px 60px}
+h1,h2,h3,h4{font-family:var(--display);margin:0;color:var(--head);letter-spacing:-.02em}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:var(--green)}
+.phone{width:430px;max-width:100%;background:var(--screen);border-radius:34px;border:1px solid rgba(255,255,255,.08);
+  overflow:hidden;box-shadow:0 0 0 9px #0c0d10,0 40px 90px -30px rgba(0,0,0,.9);display:flex;flex-direction:column;height:86vh;min-height:680px}
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:12px 22px 4px;font-size:13px;font-weight:600;color:#fff}
+.statusbar .dots{display:flex;gap:5px;align-items:center;color:var(--muted);font-family:var(--mono);font-size:11px}
+header.appbar{padding:6px 20px 14px;border-bottom:1px solid var(--line)}
+header.appbar .t{font-size:21px;font-weight:700}
+header.appbar .s{font-size:12px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:7px}
+.real{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:#04140C;background:var(--green);border-radius:5px;padding:2px 7px;font-weight:700}
+.viewport{flex:1;overflow-y:auto;padding:16px 18px 24px}
+.viewport::-webkit-scrollbar{width:7px}.viewport::-webkit-scrollbar-thumb{background:#1c222b;border-radius:8px}
+.tabbar{display:flex;gap:2px;padding:8px;background:rgba(10,12,16,.92);border-top:1px solid var(--line);overflow-x:auto}
+.tab{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 9px;border-radius:11px;color:var(--faint);font-size:10.5px;font-weight:600;white-space:nowrap}
+.tab .ic{font-size:16px;line-height:1}
+.tab.on{color:#fff;background:rgba(255,255,255,.06)}.tab.on .ic{filter:drop-shadow(0 0 6px var(--green))}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:2px 0 4px}
+.h{font-size:24px;font-weight:700}
+.sub{color:var(--muted);font-size:13px;margin:5px 0 14px;line-height:1.45}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin:12px 0}
+.card h4{font-size:14px;margin-bottom:4px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);gap:10px}
+.row:last-child{border-bottom:0}
+.k{color:var(--muted);font-size:13px}.v{color:var(--text);font-size:13px;font-weight:600;font-family:var(--mono)}
+.field{display:flex;flex-direction:column;gap:5px;margin:10px 0}
+.field label{font-size:11px;color:var(--dim);font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase}
+select,textarea,input[type=text]{width:100%;background:#0C1117;border:1px solid var(--line2);border-radius:10px;color:var(--text);
+  padding:10px 12px;font-family:var(--body);font-size:14px}
+textarea{font-family:var(--mono);font-size:12.5px;resize:vertical;min-height:90px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{background:var(--green);color:#04140C;font-weight:700;border-radius:11px;padding:11px 14px;font-size:13.5px;display:inline-flex;align-items:center;gap:7px;justify-content:center}
+.btn.sec{background:var(--card2);color:var(--text);border:1px solid var(--line2)}
+.btn.red{background:var(--red)}
+.btn:disabled{opacity:.5}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+.chip{font-size:11.5px;font-family:var(--mono);color:var(--muted);background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:6px 11px}
+.chip.on{background:var(--green);color:#04140C;border-color:transparent;font-weight:700}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 8px;font-weight:700}
+.badge.local{background:var(--green-soft);color:var(--green)}
+.badge.cloud{background:rgba(91,141,239,.16);color:var(--blue)}
+.badge.on{background:var(--green-soft);color:var(--green)}
+.badge.off{background:var(--red-soft);color:var(--red)}
+.tile{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 14px;margin:9px 0}
+.tile .tn{flex:1}.tile .tn .nm{font-size:14px;font-weight:600;color:#fff}.tile .tn .rs{font-size:11.5px;color:var(--dim);margin-top:2px}
+.dot{width:9px;height:9px;border-radius:50%}
+.mono{font-family:var(--mono);font-size:12px;white-space:pre-wrap;word-break:break-word;color:#cdd6e6;background:#0C1117;border:1px solid var(--line);border-radius:10px;padding:11px;line-height:1.5;max-height:240px;overflow:auto}
+.rationale{font-size:13px;color:var(--text);line-height:1.5;margin-top:8px}
+.bar{height:6px;background:#1c222b;border-radius:4px;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--green);border-radius:4px}
+.state-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--green-line);border-radius:30px;padding:8px 15px;font-weight:600;color:var(--green);font-size:13px}
+.note{color:var(--dim);font-size:12px;max-width:430px;text-align:center;line-height:1.5}
+.ok{color:var(--green)}.err{color:var(--red)}.warn{color:var(--amber)}
+.small{font-size:11.5px;color:var(--dim)}
+.hitscore{font-family:var(--mono);font-size:11px;color:var(--green)}
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span class="dots">SAGE · v0.17 ▰▰▰</span></div>
+    <header class="appbar">
+      <div class="t">SAGE-AGENT</div>
+      <div class="s">Interactive preview <span class="real">real @sage code</span></div>
+    </header>
+    <div id="app" class="viewport"></div>
+    <nav id="tabs" class="tabbar"></nav>
+  </div>
+  <p class="note">Browser preview of the SAGE screens running the actual platform-agnostic packages
+    (ArbiterRouter, classifier, capability gating, VoicePipeline, QuickJS sandbox, sqlite-vec-style RAG).
+    The native React Native app still needs a device; here the same logic runs live in your browser.</p>
+  <!--BUNDLE-->
+</body>
+</html>
